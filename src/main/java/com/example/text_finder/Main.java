@@ -111,7 +111,7 @@ public class Main extends Application {
             }
             i += 1;
         }
-        String[]cad3=text.split($,-1);
+        String[]cad3=text.split("\\$",-1);
         while(z!=cad3.length){
             bst.insert(cad3[z]);
             z+=1;
