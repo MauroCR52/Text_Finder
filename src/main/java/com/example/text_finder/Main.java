@@ -99,52 +99,30 @@ public class Main extends Application {
         String s = pdfStripper.getText(document);
         String cad[] = s.split("\\r\\n", -1);
         int i = 0;
-        int z=0;
+        int z = 0;
         Tree<String> bst = new BinaryTree<>();
-        String text = "";
+        StringBuilder text = new StringBuilder();
         while (i != cad.length) {
             String cad2[] = cad[i].split(" ", -1);
             int j = 0;
             while (j != cad2.length) {
-                text += cad2[j] + "$";
+                if (cad2[j] != "") {
+                    text.append(cad2[j]);
+                    text.append("$#$");
+                }
                 j += 1;
             }
             i += 1;
         }
-        String[]cad3=text.split("\\$",-1);
-        while(z!=cad3.length){
-            bst.insert(cad3[z]);
-            z+=1;
-        }
-        bst.traverse();
-        /*
-        while(i!=cad.length){
-            if(cad[i]!="\n") {
-                bst.insert(cad[i]);
-                i += 1;
+        String[] cad3 = text.toString().split("[$#$]", -1);
+        while (z != cad3.length) {
+            if (cad3[z] != "") {
+                bst.insert(cad3[z]);
             }
-            else{
-                i+=1;
-            }
+            z += 1;
         }
+        System.out.println(text);
         bst.traverse();
-
-         */
-        /*
-        String[] palabras = text.split(" " , -1);
-        int i=0;
-        Tree<String> bst = new BinaryTree<>();
-        while(i!=palabras.length){
-            bst.insert(palabras[i]);
-            i+=1;
-        }
-        i=0;
-        //Closing the document
-        document.close();
-        bst.traverse();
-
-         */
-
     }
 
 
