@@ -14,3 +14,4 @@ public class NodoAVL <T extends Comparable<T>>{
     private NodoAVL<T> rightChild;
 
 }
+//créditos para https://www.youtube.com/watch?v=Jj9Mit24CWk
