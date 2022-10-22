@@ -64,7 +64,24 @@ public class AVLTree <T extends Comparable<T>> implements Tree<T> {
             traverseInOrder(NodoAVL.getRightChild());
         }
     }
-
+    @Override
+    public void Search(String pal){
+        Search2(root,pal);
+    }
+    private void Search2(NodoAVL<T> NodoAVL, String x){
+        if(NodoAVL==null){
+            System.out.println("No fue posible encontrar la palabra");
+            return;
+        }
+        Search2(NodoAVL.getLeftChild(),x);
+        String t=  String.valueOf(NodoAVL.getData());
+        String temp[]=t.split("¬",-1);
+        if(x==temp[1]){
+            System.out.println("En este arbol se encuentra la palabra buscada");
+            return;
+        }
+        Search2(NodoAVL.getRightChild(),x);
+    }
     @Override
     public T getMax() {
         if (isEmpty()) {
@@ -153,3 +170,4 @@ public class AVLTree <T extends Comparable<T>> implements Tree<T> {
         return NodoAVL != null ? NodoAVL.getHeight() : 0;
     }
 }
+//créditos para https://www.youtube.com/watch?v=Jj9Mit24CWk

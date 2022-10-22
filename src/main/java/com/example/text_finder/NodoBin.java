@@ -11,6 +11,7 @@ public class NodoBin <T extends Comparable<T>> {
 
     private NodoBin<T> leftChild;
     private NodoBin<T> rightChild;
+    private String posicion=null;
 
 }
-//Créditos para https://www.youtube.com/watch?v=Jgx6Vr1KCsk
+//https://www.youtube.com/watch?v=zIX3zQP0khM
