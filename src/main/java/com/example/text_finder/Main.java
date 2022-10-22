@@ -1,8 +1,14 @@
 package com.example.text_finder;
+
+
+
+import com.spire.pdf.PdfDocument;
+import com.spire.pdf.PdfPageBase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import com.spire.doc.*;
 import java.io.*;
 import java.util.List;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -11,6 +17,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -117,5 +131,42 @@ public class Main extends Application {
     //Créditos para https://www.tutorialspoint.com/how-to-read-data-from-pdf-file-and-display-on-console-in-java#:~:text=Load%20an%20existing%20PDF%20document,method%20of%20the%20PDFTextStripper%20class.
     public static void main(String[] args) {
         launch();
+    }
+
+    public static void LectorDocs() throws IOException {
+        File folder = new File("src/main/java/Documentos");
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles)
+            if (file.isFile()) {
+                int cont = 0;
+                String filename = file.toString();
+                int index = filename.lastIndexOf(".");
+                if (index > 0) {
+                    String extension = filename.substring(index + 1);
+                    System.out.println(extension);
+                    if (extension.equals("txt")) {
+                        String line;
+                        FileReader fileReader = new FileReader(file.getPath());
+                        BufferedReader br = new BufferedReader(fileReader);
+                        while ((line = br.readLine()) != null) {                    /*Splits each line into words*/
+                            String words[] = line.split(" ");                    /*Counts each word*/
+                            cont += words.length;
+                        }
+                        br.close();
+                    } else if (extension.equals("docx")) {
+                        Document document = new Document();
+                        document.loadFromFile(file.getPath());
+                        cont = document.getBuiltinDocumentProperties().getWordCount();
+                    } else {
+
+
+
+
+                    }
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHH");
+                Documento documento = new Documento(file.getName(), file.getPath(), cont, Integer.parseInt(sdf.format(file.lastModified())));
+                Biblioteca.biblioteca.InsertarDocumento(documento);
+            }
     }
 }
