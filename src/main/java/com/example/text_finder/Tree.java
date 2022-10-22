@@ -7,12 +7,13 @@ package com.example.text_finder;
         void delete(T data);
 
         void traverse();
+        void Search(String hola);
 
         T getMax();
 
         T getMin();
 
         boolean isEmpty();
-
     }
+//https://www.youtube.com/watch?v=zIX3zQP0khM
 
