@@ -1,32 +1,20 @@
 package com.example.text_finder;
 
-import com.spire.pdf.PdfDocument;
-import com.spire.pdf.PdfPageBase;
+import com.spire.doc.Document;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import com.spire.doc.*;
-
-import java.io.*;
-
-import java.util.List;
-
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 
 public class Main extends Application {
@@ -95,9 +83,7 @@ public class Main extends Application {
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-            ;
         }
-
     }
 
     public static void leerPDF() throws IOException {
@@ -137,11 +123,8 @@ public class Main extends Application {
 
 
 
-    public static void main(String[] args) {
-
     public static void main(String[] args) throws IOException {
         LectorDocs();
-
         launch();
     }
 
