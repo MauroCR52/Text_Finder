@@ -7,7 +7,10 @@ package com.example.text_finder;
         void delete(T data);
 
         void traverse();
-        void Search(String hola);
+        void Search(String pal);
+        void ShowR(String pal);
+        void Repet(String pal);
+        int getComparaciones();
 
         T getMax();
 

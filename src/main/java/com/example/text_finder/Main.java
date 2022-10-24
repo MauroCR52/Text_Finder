@@ -20,12 +20,15 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
         this.leerDocx();
+
+
     }
     public static void leerTxt() {
         String ArchivoDoc = "C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.txt";
         String FieldDelimiter = " ";
         BufferedReader lector;
         Tree<String> bst = new BinaryTree<>();
+        int indicador =0;
         try {
             lector = new BufferedReader(new FileReader(ArchivoDoc));
             String linea;
@@ -39,7 +42,8 @@ public class Main extends Application {
             while (i != celdas.length) {
                 if(celdas[i]!="") {
                     String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    bst.insert(celdas[i]+"¬"+posicion);
+                    bst.insert(celdas[i]+"¬"+posicion+"¬"+String.valueOf(indicador));
+                    indicador+=1;
                 }
                 i += 1;
             }
@@ -53,10 +57,11 @@ public class Main extends Application {
             FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.docx");
             XWPFDocument docx = new XWPFDocument(file);
             List<XWPFParagraph> lParrafos = docx.getParagraphs();
-            Tree<String> bst = new BinaryTree<>();
+            Tree<String> bst = new AVLTree<>();
             String textoT="";
             String FieldDelimiter = " ";
             int i =0;
+            int indicador =0;
             for (XWPFParagraph paragraph : lParrafos) {
                 String temp = (paragraph.getText());
                 textoT +=temp;
@@ -66,12 +71,14 @@ public class Main extends Application {
             while (i != celdas.length) {
                 if(celdas[i]!="") {
                     String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    bst.insert(celdas[i]+"¬"+posicion);
+                    bst.insert(celdas[i]+"¬"+posicion+"¬"+String.valueOf(indicador));
+                    indicador+=1;
                 }
                 i += 1;
             }
             bst.traverse();
-            bst.Search("Hola");
+            bst.Search("mi nombre");
+            System.out.println(bst.getComparaciones());
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
@@ -87,6 +94,7 @@ public class Main extends Application {
         //Retrieving text from PDF document
         String s = pdfStripper.getText(document);
         String cad[] = s.split("\\r\\n", -1);
+        int indicador=0;
         int i = 0;
         int z = 0;
         Tree<String> bst = new BinaryTree<>();
@@ -107,7 +115,8 @@ public class Main extends Application {
         while (z != cad3.length) {
             if (cad3[z] != "") {
                 String posicion = String.valueOf(textoT.indexOf(cad3[z]));
-                bst.insert(cad3[z]+"¬"+posicion);
+                bst.insert(cad3[z]+"¬"+posicion+"¬"+String.valueOf(indicador));
+                indicador+=1;
             }
             z += 1;
         }
