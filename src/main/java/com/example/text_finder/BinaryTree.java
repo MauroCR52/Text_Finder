@@ -1,19 +1,18 @@
 package com.example.text_finder;
 
-import lombok.NonNull;
-
 import java.util.Objects;
 
 public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     private NodoBin<T> root;
     private Boolean r = false;
+    private String textResult = "";
+    private int comparaciones=0;
 
     @Override
     public BinaryTree<T> insert(T data) {
         root = insert(data, root);
         return this;
     }
-
     private NodoBin<T> insert(T data, NodoBin<T> NodoBin) {
         if (NodoBin == null) {
             return new NodoBin<>(data);
@@ -22,6 +21,8 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             NodoBin.setLeftChild(insert(data, NodoBin.getLeftChild()));
 
         } else if (data.compareTo(NodoBin.getData()) > 0) {
+            NodoBin.setRightChild(insert(data, NodoBin.getRightChild()));
+        } else {
             NodoBin.setRightChild(insert(data, NodoBin.getRightChild()));
         }
         return NodoBin;
@@ -53,7 +54,10 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin;
     }
-
+    @Override
+    public int getComparaciones() {
+        return comparaciones;
+    }
     @Override
     public void traverse() {
         traverseInOrder(root);
@@ -71,7 +75,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public void Search(String pal) {
         r = false;
-        Search2(root, pal);
+        SearchW(root, pal);
         if (!r) {
             System.out.println("La palabra no se encuentra en el texto");
         } else {
@@ -79,21 +83,72 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
     }
 
-    private void Search2(NodoBin<T> NodoBin, String x) {
+    private void SearchW(NodoBin<T> NodoBin, String x) {
 
-        if (r == false) {
+        if (!r) {
             if (NodoBin == null) {
                 return;
             }
-            Search2(NodoBin.getLeftChild(), x);
+            SearchW(NodoBin.getLeftChild(), x);
             String t = String.valueOf(NodoBin.getData());
             String temp[] = t.split("¬", -1);
+            comparaciones+=1;
             if (Objects.equals(x, String.valueOf(temp[0]))) {
                 r = true;
             }
-            Search2(NodoBin.getRightChild(), x);
+            SearchW(NodoBin.getRightChild(), x);
         }
 
+    }
+
+    @Override
+    public void ShowR(String pal) {
+        showRAux(root, pal);
+        System.out.println(textResult);
+    }
+
+    private void showRAux(NodoBin<T> NodoBin, String x) {
+        int y = 0;
+        if (!r) {
+            if (NodoBin == null) {
+                return;
+            }
+            showRAux(NodoBin.getLeftChild(), x);
+            String t = String.valueOf(NodoBin.getData());
+            String temp[] = t.split("¬", -1);
+            comparaciones+=1;
+            if (Objects.equals(x, String.valueOf(temp[0]))) {
+                String textResult = "";
+                y = Integer.valueOf(temp[2]);
+                textResult += String.valueOf(temp[0]);
+                textResult += " ";
+                while ((Integer.valueOf(temp[2]) - y) != -4) {
+                    boolean temp2 = false;
+                    NextWords(root, y, temp2);
+                    y += 1;
+                }
+                r = true;
+            }
+            showRAux(NodoBin.getRightChild(), x);
+        }
+    }
+
+    private void NextWords(NodoBin<T> NodoBin, int x, boolean y) {
+        if (!y) {
+            if (NodoBin == null) {
+                return;
+            }
+            NextWords(NodoBin.getLeftChild(), x, y);
+            String t = String.valueOf(NodoBin.getData());
+            String temp[] = t.split("¬", -1);
+            comparaciones+=1;
+            if (Objects.equals(x, Integer.valueOf(temp[2]))) {
+                textResult += String.valueOf(temp[0]) + " ";
+                y = true;
+            }
+
+            NextWords(NodoBin.getRightChild(), x, y);
+        }
     }
 
     @Override
@@ -130,6 +185,84 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     public boolean isEmpty() {
         return root == null;
     }
+
+    @Override
+    public void Repet(String pal) {
+        r = false;
+        int cont = 0;
+        Repet2(root, pal, cont);
+        if (!r) {
+            ShowR(pal);
+        } else {
+            r = false;
+            Repet3(root,pal);
+            System.out.println(textResult);
+        }
+    }
+
+    private void Repet2(NodoBin<T> NodoBin, String x, int y) {
+        if (!r) {
+            if (NodoBin == null) {
+                return;
+            }
+            Repet2(NodoBin.getLeftChild(), x, y);
+            String t = String.valueOf(NodoBin.getData());
+            String temp[] = t.split("¬", -1);
+            comparaciones+=1;
+            if (Objects.equals(x, String.valueOf(temp[0]))) {
+                y += 1;
+                if (y > 1) {
+                    r = true;
+                }
+            }
+            Repet2(NodoBin.getRightChild(), x, y);
+        }
+
+    }
+
+    private void Repet3(NodoBin<T> NodoBin, String x) {
+        int y;
+        if (NodoBin == null) {
+            return;
+        }
+        Repet3(NodoBin.getLeftChild(), x);
+        String t = String.valueOf(NodoBin.getData());
+        String[] temp = t.split("¬", -1);
+        comparaciones+=1;
+        if (Objects.equals(x, String.valueOf(temp[0]))) {
+            y = Integer.parseInt(temp[2]);
+            while ((Integer.parseInt(temp[2]) - y) != -4) {
+                boolean temp2 = false;
+                NextWords(root, y, temp2);
+                y += 1;
+            }
+            textResult+="\n";
+        }
+        Repet3(NodoBin.getRightChild(), x);
+    }
+    @Override
+    public void backtop() {
+        backtopAux(root,0);
+    }
+    private void backtopAux(NodoBin<T> NodoBin,int pos) {
+        String text="";
+        if (NodoBin == null) {
+            System.out.println(text);
+            return;
+        }
+        backtopAux(NodoBin.getLeftChild(),pos);
+        String t = String.valueOf(NodoBin.getData());
+        String temp[] = t.split("¬", -1);
+        comparaciones+=1;
+        if (Objects.equals(pos, Integer.valueOf(temp[2]))) {
+            text+= String.valueOf(temp[0]);
+            pos+=1;
+            backtopAux(root,pos);
+        }
+        backtopAux(NodoBin.getRightChild(),pos);
+    }
+
+
 }
 //https://www.youtube.com/watch?v=zIX3zQP0khM
 
