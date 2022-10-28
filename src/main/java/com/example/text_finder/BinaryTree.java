@@ -240,6 +240,27 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         Repet3(NodoBin.getRightChild(), x);
     }
+    @Override
+    public void backtop() {
+        backtopAux(root,0);
+    }
+    private void backtopAux(NodoBin<T> NodoBin,int pos) {
+        String text="";
+        if (NodoBin == null) {
+            System.out.println(text);
+            return;
+        }
+        backtopAux(NodoBin.getLeftChild(),pos);
+        String t = String.valueOf(NodoBin.getData());
+        String temp[] = t.split("¬", -1);
+        comparaciones+=1;
+        if (Objects.equals(pos, Integer.valueOf(temp[2]))) {
+            text+= String.valueOf(temp[0]);
+            pos+=1;
+            backtopAux(root,pos);
+        }
+        backtopAux(NodoBin.getRightChild(),pos);
+    }
 
 
 }

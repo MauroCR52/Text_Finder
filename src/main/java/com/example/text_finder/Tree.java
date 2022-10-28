@@ -11,6 +11,7 @@ package com.example.text_finder;
         void ShowR(String pal);
         void Repet(String pal);
         int getComparaciones();
+        void backtop();
 
         T getMax();
 

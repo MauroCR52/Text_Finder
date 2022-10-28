@@ -11,6 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -19,9 +24,18 @@ public class Main extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+        /*
+        String a= "soy,";
+        int b= a.length()-1;
+        //String s = "a,bdfd.gfg;djfda:dgfs?dkfjsd¿djfkldjs¡kj!-jfd_fjdjd,dfcb*fd";
+        String s="a,";
+        String[]str=s.split("[,.;:¿?¡!*]");
+        for (int i=0;i<str.length;i++){
+            System.out.println("Str["+i+"]:"+str[i]);
+        }
+
+         */
         this.leerDocx();
-
-
     }
     public static void leerTxt() {
         String ArchivoDoc = "C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.txt";
@@ -76,8 +90,7 @@ public class Main extends Application {
                 }
                 i += 1;
             }
-            bst.traverse();
-            bst.Search("mi nombre");
+            bst.Search("documento");
             System.out.println(bst.getComparaciones());
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
@@ -124,6 +137,52 @@ public class Main extends Application {
         bst.traverse();
     }
     //Créditos para https://www.tutorialspoint.com/how-to-read-data-from-pdf-file-and-display-on-console-in-java#:~:text=Load%20an%20existing%20PDF%20document,method%20of%20the%20PDFTextStripper%20class.
+    public void modDocx(String oldWord, String newWord) throws IOException {
+    int count = 0;
+    XWPFDocument document = new XWPFDocument();
+    XWPFDocument docx = new XWPFDocument(new FileInputStream("Prueba.docx"));
+    XWPFWordExtractor we = new XWPFWordExtractor(docx);
+    String text = we.getText() ;
+        if(text.contains(oldWord)){
+        text = text.replace(oldWord, newWord);
+        System.out.println(text);
+    }
+    char[] c = text.toCharArray();
+        for(int i= 0; i < c.length;i++){
+
+        if(c[i] == '\n'){
+            count ++;
+        }
+    }
+        System.out.println(c[0]);
+    StringTokenizer st = new StringTokenizer(text,"\n");
+
+    XWPFParagraph para = document.createParagraph();
+        para.setAlignment(ParagraphAlignment.CENTER);
+    XWPFRun run = para.createRun();
+        run.setBold(true);
+        run.setFontSize(36);
+        run.setText("Apache POI works well!");
+
+    List<XWPFParagraph>paragraphs = new ArrayList<XWPFParagraph>();
+    List<XWPFRun>runs = new ArrayList<XWPFRun>();
+    int k = 0;
+        for(k=0;k<count+1;k++){
+        paragraphs.add(document.createParagraph());
+    }
+    k=0;
+        while(st.hasMoreElements()){
+        paragraphs.get(k).setAlignment(ParagraphAlignment.LEFT);
+        paragraphs.get(k).setSpacingAfter(0);
+        paragraphs.get(k).setSpacingBefore(0);
+        run = paragraphs.get(k).createRun();
+        run.setText(st.nextElement().toString());
+        k++;
+    }
+
+        document.write(new FileOutputStream("Prueba.docx"));
+}
+
     public static void main(String[] args) {
         launch();
     }

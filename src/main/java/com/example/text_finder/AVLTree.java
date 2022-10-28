@@ -7,7 +7,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private boolean r = false;
     private String textResult = "";
     private int comparaciones = 0;
+    private String ultpal;
+    private int pos = 0;
     public AVLTree next = null;
+    private int apariciones=0;
 
     @Override
     public AVLTree<T> insert(T data) {
@@ -76,43 +79,74 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void Search(String pal) {
-        String phra[] = pal.split(" ", -1);
+        String[] phra = pal.split(" ", -1);
         if (phra.length > 1) {
-            r=false;
-            SearchP(root,phra);
-            if(!r){
+            r = false;
+            SearchP(root, phra);
+            if (!r) {
                 System.out.println("La frase no se encuentra en el texto");
-            }
-            else{
-                System.out.println("La frase se encuentra en el texto");
+            } else {
+                ShowRP(pal);
+                System.out.println(textResult);
             }
 
         } else {
-            r = false;
+            apariciones=0;
+            textResult="";
             SearchW(root, pal);
-            if (!r) {
+            if (apariciones==0) {
                 System.out.println("La palabra no se encuentra en el texto");
-                Repet(pal);
-            } else {
+            }
+            else if(apariciones==1){
                 System.out.println("La palabra se encuentra en el texto");
+                System.out.println("Las palabras que las acompañan son las siguientes");
+                System.out.println(textResult);
+            }
+            else {
+                System.out.println("La palabra se encuentra en el texto, Además está repetida");
+                System.out.println("Las palabras que acompañan a tu búsqueda son las siguientes:");
+                System.out.println(textResult);
             }
         }
     }
 
     private void SearchW(NodoAVL<T> NodoAVL, String x) {
-        if (!r) {
-            if (NodoAVL == null) {
-                return;
-            }
-            SearchW(NodoAVL.getLeftChild(), x);
-            String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
-            comparaciones += 1;
-            if (Objects.equals(x, String.valueOf(temp[0]))) {
-                r = true;
-            }
-            SearchW(NodoAVL.getRightChild(), x);
+        int y = 0;
+        if (NodoAVL == null) {
+            return;
         }
+        SearchW(NodoAVL.getLeftChild(), x);
+        String t = String.valueOf(NodoAVL.getData());
+        String[] temp = t.split("¬", -1);
+        comparaciones ++;
+        int b = temp[0].length() - 1;
+        String z = String.valueOf(temp[0].charAt(b));
+        if (z.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || z.equals("¡") || z.equals("!")) {
+            String[] tempx = temp[0].split("[,.;:¿?¡!*]");
+            if (Objects.equals(x, String.valueOf(tempx[0]))) {
+                y = Integer.parseInt(temp[2]);
+                while ((Integer.parseInt(temp[2]) - y) != -5) {
+                    boolean temp2 = false;
+                    NextWords(root, y, temp2);
+                    y += 1;
+
+                }
+                textResult+="\n";
+                apariciones++;
+            }
+        }
+
+        if (Objects.equals(x, String.valueOf(temp[0]))) {
+            y = Integer.parseInt(temp[2]);
+            while ((Integer.parseInt(temp[2]) - y) != -5) {
+                boolean temp2 = false;
+                NextWords(root, y, temp2);
+                y += 1;
+            }
+            apariciones++;
+            textResult+="\n";
+        }
+        SearchW(NodoAVL.getRightChild(), x);
     }
 
     private void SearchP(NodoAVL<T> NodoAVL, String[] x) {
@@ -122,19 +156,18 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
             SearchP(NodoAVL.getLeftChild(), x);
             String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
+            String[] temp = t.split("¬", -1);
             comparaciones += 1;
             if (Objects.equals(x[0], String.valueOf(temp[0]))) {
                 int i = 1;
-                int j= Integer.parseInt(temp[2]) + 1;
+                int j = Integer.parseInt(temp[2]) + 1;
                 while (i != x.length) {
-                    boolean temp2=false;
-                    textResult="";
-                    SearchPAux(root,j,temp2);
-                    System.out.println(textResult+" "+x[i]);
-                    if (Objects.equals(x[i], textResult)){
+                    boolean temp2 = false;
+                    textResult = "";
+                    SearchPAux(root, j, temp2);
+                    if (Objects.equals(x[i], textResult)) {
                         i += 1;
-                        j+=1;
+                        j += 1;
                     } else {
                         r = false;
                         break;
@@ -146,17 +179,19 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
     }
 
+    //Muestra las palabras que le siguen a la palabra que coincidió
     private void SearchPAux(NodoAVL<T> NodoAVL, int x, boolean y) {
-        if(!y) {
+        if (!y) {
             if (NodoAVL == null) {
                 return;
             }
             SearchPAux(NodoAVL.getLeftChild(), x, y);
             String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
+            String[] temp = t.split("¬", -1);
             comparaciones += 1;
             if (Objects.equals(x, Integer.valueOf(temp[2]))) {
-                textResult= temp[0];
+                textResult = temp[0];
+                ultpal = temp[2];
             }
             SearchPAux(NodoAVL.getRightChild(), x, y);
         }
@@ -166,33 +201,23 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void ShowR(String pal) {
-        showRAux(root, pal);
-        System.out.println(textResult);
+
     }
 
-    private void showRAux(NodoAVL<T> NodoAVL, String x) {
-        int y = 0;
-        if (!r) {
-            if (NodoAVL == null) {
-                return;
-            }
-            showRAux(NodoAVL.getLeftChild(), x);
-            String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
-            comparaciones += 1;
-            if (Objects.equals(x, String.valueOf(temp[0]))) {
-                String textResult = "";
-                y = Integer.valueOf(temp[2]);
-                textResult += String.valueOf(temp[0]);
-                textResult += " ";
-                while ((Integer.valueOf(temp[2]) - y) != -3) {
-                    boolean temp2 = false;
-                    NextWords(root, y, temp2);
-                    y += 1;
-                }
-                r = true;
-            }
-            showRAux(NodoAVL.getRightChild(), x);
+    private void showWRAux(NodoAVL<T> NodoAVL, String x) {
+
+    }
+
+    private void ShowRP(String pal) {
+        textResult = "";
+        int y = Integer.parseInt(ultpal) + 1;
+        textResult += pal;
+        textResult += " ";
+        while ((Integer.parseInt(ultpal) - y) != -6) {
+            boolean temp2 = false;
+            NextWords(root, y, temp2);
+            y += 1;
+
         }
     }
 
@@ -203,10 +228,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
             NextWords(NodoAVL.getLeftChild(), x, y);
             String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
+            String[] temp = t.split("¬", -1);
             comparaciones += 1;
             if (Objects.equals(x, Integer.valueOf(temp[2]))) {
-                textResult += String.valueOf(temp[0]) + " ";
+                textResult += (temp[0]) + " ";
                 y = true;
             }
 
@@ -303,67 +328,75 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private int height(NodoAVL<T> NodoAVL) {
         return NodoAVL != null ? NodoAVL.getHeight() : 0;
     }
+    public void Repet(String x){
 
+    }
+    /*
     @Override
     public void Repet(String pal) {
         r = false;
         int cont = 0;
-        Repet2(root, pal, cont);
-        if (!r) {
-            ShowR(pal);
-        } else {
+        String[] phra = pal.split(" ", -1);
+        if (phra.length > 1) {
             r = false;
-            Repet3(root, pal);
-            System.out.println(textResult);
+            RepetP(root, phra, cont);
+            if (!r) {
+                ShowRP(pal);
+            } else {
+                r = false;
+                RepetP2(root, pal);
+                System.out.println(textResult);
+            }
+        } else {
+            RepetW(root, pal, cont);
+            if (!r) {
+                ShowR(pal);
+            } else {
+                r = false;
+                RepetW2(root, pal);
+                System.out.println(textResult);
+            }
         }
     }
 
-    private void Repet2(NodoAVL<T> NodoAVL, String x, int y) {
-        if (!r) {
-            if (NodoAVL == null) {
-                return;
-            }
-            Repet2(NodoAVL.getLeftChild(), x, y);
-            String t = String.valueOf(NodoAVL.getData());
-            String temp[] = t.split("¬", -1);
-            comparaciones += 1;
-            if (Objects.equals(x, String.valueOf(temp[0]))) {
-                y += 1;
-                if (y > 1) {
-                    r = true;
-                }
-            }
-            Repet2(NodoAVL.getRightChild(), x, y);
-        }
+     */
+
+    private void RepetW(NodoAVL<T> NodoAVL, String x, int y) {
 
     }
 
-    private void Repet3(NodoAVL<T> NodoAVL, String x) {
-        int y;
-        if (NodoAVL == null) {
-            return;
-        }
-        Repet3(NodoAVL.getLeftChild(), x);
-        String t = String.valueOf(NodoAVL.getData());
-        String[] temp = t.split("¬", -1);
-        comparaciones += 1;
-        if (Objects.equals(x, String.valueOf(temp[0]))) {
-            y = Integer.parseInt(temp[2]);
-            while ((Integer.parseInt(temp[2]) - y) != -4) {
-                boolean temp2 = false;
-                NextWords(root, y, temp2);
-                y += 1;
-            }
-            textResult += "\n";
-        }
-
-
-        Repet3(NodoAVL.getRightChild(), x);
+    private void RepetW2(NodoAVL<T> NodoAVL, String x) {
+    
     }
 
     @Override
     public int getComparaciones() {
         return comparaciones;
+    }
+
+    @Override
+    public void backtop() {
+        textResult = "";
+        pos = 0;
+        backtopAux(root);
+        System.out.println(textResult);
+    }
+
+    private void backtopAux(NodoAVL<T> NodoAVL) {
+        if (NodoAVL == null) {
+            return;
+        }
+        backtopAux(NodoAVL.getLeftChild());
+        String t = String.valueOf(NodoAVL.getData());
+        String[] temp = t.split("¬", -1);
+        comparaciones += 1;
+        if (pos == Integer.parseInt(temp[2])) {
+            textResult += String.valueOf(temp[0]);
+            textResult += " ";
+            pos++;
+            backtopAux(root);
+        }
+        backtopAux(NodoAVL.getRightChild());
     }
 }
 //créditos para https://www.youtube.com/watch?v=Jj9Mit24CWk
