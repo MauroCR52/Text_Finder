@@ -2,9 +2,12 @@ package com.example.text_finder;
 
 
 
+
 import com.spire.doc.Document;
 import com.spire.pdf.PdfDocument;
 import com.spire.pdf.PdfPageBase;
+
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,34 +15,32 @@ import javafx.stage.Stage;
 import com.spire.doc.*;
 import java.io.*;
 import java.util.List;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("server.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Server");
         stage.setScene(scene);
         stage.show();
+
         /*
         String a= "soy,";
         int b= a.length()-1;
@@ -49,9 +50,11 @@ public class Main extends Application {
         for (int i=0;i<str.length;i++){
             System.out.println("Str["+i+"]:"+str[i]);
         }
-
          */
         this.leerDocx();
+        Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
+
+        //this.leerDocx();
     }
     public static void leerTxt() {
         String ArchivoDoc = "C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.txt";
@@ -82,8 +85,10 @@ public class Main extends Application {
             throw new RuntimeException(e);
         }
     }
+
     public static void leerDocx() {
         try {
+
             FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.docx");
             XWPFDocument docx = new XWPFDocument(file);
             List<XWPFParagraph> lParrafos = docx.getParagraphs();
@@ -113,6 +118,7 @@ public class Main extends Application {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
         }
     }
+
     //Créditos para https://www.youtube.com/watch?v=CCgcMGdKurw
 
     public static void leerPDF() throws IOException {
@@ -200,10 +206,27 @@ public class Main extends Application {
 }
 
     public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        LectorDocs();
+        System.out.println("Lista sin ordenar");
+        leer_biblio();
+        System.out.println("\n");
+        Biblioteca.biblioteca.ordenar_fecha();
+        System.out.println("Ordenar por fecha");
+        leer_biblio();
+        System.out.println("\n");
+        Nodo_Biblioteca n = Biblioteca.biblioteca.head;
+        while (n.next != null)
+            n = n.next;
+        Biblioteca.biblioteca.ordenar_nombre(Biblioteca.biblioteca.head, n);
+        System.out.println("Ordenar por nombre");
+        leer_biblio();
         launch();
     }
 
+    static Integer[] lista_radix;
     public static void LectorDocs() throws IOException {
+        List<Integer> lista = new ArrayList<Integer>();
         File folder = new File("src/main/java/Documentos");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles)
@@ -213,7 +236,6 @@ public class Main extends Application {
                 int index = filename.lastIndexOf(".");
                 if (index > 0) {
                     String extension = filename.substring(index + 1);
-                    System.out.println(extension);
                     if (extension.equals("txt")) {
                         String line;
                         FileReader fileReader = new FileReader(file.getPath());
@@ -227,16 +249,58 @@ public class Main extends Application {
                         Document document = new Document();
                         document.loadFromFile(file.getPath());
                         cont = document.getBuiltinDocumentProperties().getWordCount();
-                    } else {
-
-
-
+                    }
+                    else {
+                        PDDocument document = PDDocument.load(file);
+                        //Instantiate PDFTextStripper class
+                        PDFTextStripper pdfStripper = new PDFTextStripper();
+                        //Retrieving text from PDF document
+                        String s = pdfStripper.getText(document);
+                        String cad[] = s.split("\\r\\n", -1);
+                        int i = 0;
+                        int z = 0;
+                        Tree<String> bst = new BinaryTree<>();
+                        StringBuilder textoT = new StringBuilder();
+                        while (i != cad.length) {
+                            String cad2[] = cad[i].split(" ", -1);
+                            int j = 0;
+                            while (j != cad2.length) {
+                                if (cad2[j] != "") {
+                                    textoT.append(cad2[j]);
+                                    textoT.append(" ");
+                                }
+                                j += 1;
+                            }
+                            i += 1;
+                        }
+                        String[] cad3 = textoT.toString().split(" ", -1);
+                        while (z != cad3.length) {
+                            if (cad3[z] != "") {
+                                String posicion = String.valueOf(textoT.indexOf(cad3[z]));
+                                bst.insert(cad3[z]+"¬"+posicion);
+                            }
+                            z += 1;
+                            cont += 1;
+                        }
+                        document.close();
 
                     }
                 }
+                lista.add(cont);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHH");
                 Documento documento = new Documento(file.getName(), file.getPath(), cont, Integer.parseInt(sdf.format(file.lastModified())));
                 Biblioteca.biblioteca.InsertarDocumento(documento);
             }
+        lista_radix = new Integer[lista.size()];
+        lista_radix = lista.toArray(lista_radix);
+
+        System.out.println(Arrays.toString(lista_radix));
+    }
+    public static void leer_biblio(){
+        Nodo_Biblioteca actual = Biblioteca.biblioteca.head;
+        while (actual != null){
+            System.out.println(actual.getData().getNombre() + " "+ actual.getData().getFecha() + " " +actual.getData().getTamano());
+            actual = actual.next;
+        }
     }
 }
