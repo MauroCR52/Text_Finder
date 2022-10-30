@@ -11,7 +11,7 @@ public class Documento {
         Nombre = nombre;
     }
 
-    public Documento(String nombre, String direccion, int tamano, int fecha) {
+    public Documento(String nombre, String direccion, int tamano, int fecha, String substring) {
         this.Nombre = nombre;
         this.Direccion = direccion;
         this.Tamano = tamano;

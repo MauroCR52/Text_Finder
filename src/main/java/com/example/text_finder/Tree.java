@@ -8,9 +8,8 @@ package com.example.text_finder;
 
         void traverse();
         void Search(String pal);
-        void ShowR(String pal);
-        void Repet(String pal);
         int getComparaciones();
+        void setComparaciones(int num);
         void backtop();
 
         T getMax();
