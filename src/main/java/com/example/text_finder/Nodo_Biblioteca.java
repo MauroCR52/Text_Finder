@@ -24,5 +24,4 @@ public class Nodo_Biblioteca {
     public void setNext(Nodo_Biblioteca next) {
         this.next = next;
     }
-
 }

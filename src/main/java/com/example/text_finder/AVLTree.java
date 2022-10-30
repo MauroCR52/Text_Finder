@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private NodoAVL<T> root;
-    private boolean r = false;
-    private String textResult = "";
-    private int comparaciones = 0;
+    private static boolean r = false;
+    public static String textResult = "";
+    public static int comparacionesAVL = 0;
     private String ultpal;
     private int pos = 0;
     public AVLTree next = null;
@@ -84,9 +84,11 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             r = false;
             SearchP(root, phra);
             if (!r) {
+                Server.encontrado = false;
                 System.out.println("La frase no se encuentra en el texto");
             } else {
                 ShowRP(pal);
+                Server.encontrado = true;
                 System.out.println(textResult);
             }
 
@@ -95,14 +97,19 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             textResult="";
             SearchW(root, pal);
             if (apariciones==0) {
+                Server.encontrado = false;
                 System.out.println("La palabra no se encuentra en el texto");
             }
             else if(apariciones==1){
+                Server.mensaje = textResult + " "+ comparacionesAVL;
+                Server.encontrado = true;
                 System.out.println("La palabra se encuentra en el texto");
                 System.out.println("Las palabras que las acompañan son las siguientes");
                 System.out.println(textResult);
             }
             else {
+                Server.mensaje = textResult + " "+ comparacionesAVL;
+                Server.encontrado = true;
                 System.out.println("La palabra se encuentra en el texto, Además está repetida");
                 System.out.println("Las palabras que acompañan a tu búsqueda son las siguientes:");
                 System.out.println(textResult);
@@ -118,7 +125,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         SearchW(NodoAVL.getLeftChild(), x);
         String t = String.valueOf(NodoAVL.getData());
         String[] temp = t.split("¬", -1);
-        comparaciones ++;
+        comparacionesAVL++;
         int b = temp[0].length() - 1;
         String z = String.valueOf(temp[0].charAt(b));
         if (z.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || z.equals("¡") || z.equals("!")) {
@@ -157,7 +164,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             SearchP(NodoAVL.getLeftChild(), x);
             String t = String.valueOf(NodoAVL.getData());
             String[] temp = t.split("¬", -1);
-            comparaciones += 1;
+            comparacionesAVL += 1;
             if (Objects.equals(x[0], String.valueOf(temp[0]))) {
                 int i = 1;
                 int j = Integer.parseInt(temp[2]) + 1;
@@ -188,7 +195,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             SearchPAux(NodoAVL.getLeftChild(), x, y);
             String t = String.valueOf(NodoAVL.getData());
             String[] temp = t.split("¬", -1);
-            comparaciones += 1;
+            comparacionesAVL += 1;
             if (Objects.equals(x, Integer.valueOf(temp[2]))) {
                 textResult = temp[0];
                 ultpal = temp[2];
@@ -229,7 +236,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             NextWords(NodoAVL.getLeftChild(), x, y);
             String t = String.valueOf(NodoAVL.getData());
             String[] temp = t.split("¬", -1);
-            comparaciones += 1;
+            comparacionesAVL += 1;
             if (Objects.equals(x, Integer.valueOf(temp[2]))) {
                 textResult += (temp[0]) + " ";
                 y = true;
@@ -371,7 +378,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public int getComparaciones() {
-        return comparaciones;
+        return comparacionesAVL;
     }
 
     @Override
@@ -389,7 +396,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         backtopAux(NodoAVL.getLeftChild());
         String t = String.valueOf(NodoAVL.getData());
         String[] temp = t.split("¬", -1);
-        comparaciones += 1;
+        comparacionesAVL += 1;
         if (pos == Integer.parseInt(temp[2])) {
             textResult += String.valueOf(temp[0]);
             textResult += " ";

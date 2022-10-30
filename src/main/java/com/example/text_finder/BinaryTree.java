@@ -6,7 +6,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     private NodoBin<T> root;
     private Boolean r = false;
     private String textResult = "";
-    private int comparaciones=0;
+    public static int comparacionesBin =0;
 
     @Override
     public BinaryTree<T> insert(T data) {
@@ -56,7 +56,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
     @Override
     public int getComparaciones() {
-        return comparaciones;
+        return comparacionesBin;
     }
     @Override
     public void traverse() {
@@ -92,7 +92,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             SearchW(NodoBin.getLeftChild(), x);
             String t = String.valueOf(NodoBin.getData());
             String temp[] = t.split("¬", -1);
-            comparaciones+=1;
+            comparacionesBin +=1;
             if (Objects.equals(x, String.valueOf(temp[0]))) {
                 r = true;
             }
@@ -116,7 +116,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             showRAux(NodoBin.getLeftChild(), x);
             String t = String.valueOf(NodoBin.getData());
             String temp[] = t.split("¬", -1);
-            comparaciones+=1;
+            comparacionesBin +=1;
             if (Objects.equals(x, String.valueOf(temp[0]))) {
                 String textResult = "";
                 y = Integer.valueOf(temp[2]);
@@ -141,7 +141,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             NextWords(NodoBin.getLeftChild(), x, y);
             String t = String.valueOf(NodoBin.getData());
             String temp[] = t.split("¬", -1);
-            comparaciones+=1;
+            comparacionesBin +=1;
             if (Objects.equals(x, Integer.valueOf(temp[2]))) {
                 textResult += String.valueOf(temp[0]) + " ";
                 y = true;
@@ -208,7 +208,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             Repet2(NodoBin.getLeftChild(), x, y);
             String t = String.valueOf(NodoBin.getData());
             String temp[] = t.split("¬", -1);
-            comparaciones+=1;
+            comparacionesBin +=1;
             if (Objects.equals(x, String.valueOf(temp[0]))) {
                 y += 1;
                 if (y > 1) {
@@ -228,7 +228,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         Repet3(NodoBin.getLeftChild(), x);
         String t = String.valueOf(NodoBin.getData());
         String[] temp = t.split("¬", -1);
-        comparaciones+=1;
+        comparacionesBin +=1;
         if (Objects.equals(x, String.valueOf(temp[0]))) {
             y = Integer.parseInt(temp[2]);
             while ((Integer.parseInt(temp[2]) - y) != -4) {
@@ -253,7 +253,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         backtopAux(NodoBin.getLeftChild(),pos);
         String t = String.valueOf(NodoBin.getData());
         String temp[] = t.split("¬", -1);
-        comparaciones+=1;
+        comparacionesBin +=1;
         if (Objects.equals(pos, Integer.valueOf(temp[2]))) {
             text+= String.valueOf(temp[0]);
             pos+=1;
