@@ -22,7 +22,6 @@ public class Server {
             System.out.println("Error creando servidor");
             e.printStackTrace();
         }
-
     }
     public static void sendMessageToClient(String messageToClient){
         try {
