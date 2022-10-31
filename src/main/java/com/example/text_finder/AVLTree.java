@@ -101,14 +101,12 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
                 System.out.println("La palabra no se encuentra en el texto");
             }
             else if(apariciones==1){
-                Server.mensaje = textResult + " "+ comparacionesAVL;
                 Server.encontrado = true;
                 System.out.println("La palabra se encuentra en el texto");
                 System.out.println("Las palabras que las acompañan son las siguientes");
                 System.out.println(textResult);
             }
             else {
-                Server.mensaje = textResult + " "+ comparacionesAVL;
                 Server.encontrado = true;
                 System.out.println("La palabra se encuentra en el texto, Además está repetida");
                 System.out.println("Las palabras que acompañan a tu búsqueda son las siguientes:");
@@ -138,7 +136,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
                     y += 1;
 
                 }
-                textResult+="\n";
+                textResult+=" ";
                 apariciones++;
             }
         }
@@ -151,7 +149,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
                 y += 1;
             }
             apariciones++;
-            textResult+="\n";
+            textResult+=" ";
         }
         SearchW(NodoAVL.getRightChild(), x);
     }

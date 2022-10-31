@@ -53,7 +53,8 @@ public class Main extends Application {
         }
          */
        // this.leerDocx();
-        Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
+      //  Controller.addLabel("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.", vBox);
+
 
     }
 

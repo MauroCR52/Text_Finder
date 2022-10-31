@@ -71,22 +71,19 @@ public class Server {
                             if (actual.getData().getTipo().equals("docx")){
                                 leerDocx(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ " "+ AVLTree.comparacionesAVL
-                                            + " "+ BinaryTree.comparacionesBin + " "+ AVLTree.textResult);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
                                 }
                             }
                             else if (actual.getData().getTipo().equals("txt")){
                                 leerTxt(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ " "+ AVLTree.comparacionesAVL
-                                    + " "+ BinaryTree.comparacionesBin + " "+ AVLTree.textResult);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
                                 }
                             }
                             else {
                                 leerPDF(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ " "+ AVLTree.comparacionesAVL
-                                            + " "+ BinaryTree.comparacionesBin + " "+ AVLTree.textResult);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
                                 }
                             }
                             actual = actual.next;
@@ -172,6 +169,7 @@ public class Server {
                 }
                 i += 1;
             }
+
             bst.Search(messageFromClient);
             bin.Search(messageFromClient);
         //    bin.Search(messageFromClient);
@@ -305,7 +303,6 @@ public class Server {
                         String cad[] = s.split("\\r\\n", -1);
                         int i = 0;
                         int z = 0;
-                        Tree<String> bst = new BinaryTree<>();
                         StringBuilder textoT = new StringBuilder();
                         while (i != cad.length) {
                             String cad2[] = cad[i].split(" ", -1);
@@ -323,7 +320,6 @@ public class Server {
                         while (z != cad3.length) {
                             if (cad3[z] != "") {
                                 String posicion = String.valueOf(textoT.indexOf(cad3[z]));
-                                bst.insert(cad3[z]+"¬"+posicion);
                             }
                             z += 1;
                             cont += 1;
