@@ -57,8 +57,8 @@ public class Main extends Application {
             System.out.println("Str["+i+"]:"+str[i]);
         }
          */
-        this.leerDocx();
-        Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
+      //  this.leerDocx();
+      //  Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
 
         //this.leerDocx();
     }
@@ -115,12 +115,12 @@ public class Main extends Application {
             while (i != celdas.length) {
                 if (celdas[i] != "") {
                     String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    if (celdas.length - i >= 3) {
+                    if (celdas.length - i >= 4) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
                         indicador += 1;
-                    } else if (celdas.length - i == 2) {
+                    } else if (celdas.length - i == 3) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
-                    } else if (celdas.length - i == 1) {
+                    } else if (celdas.length - i == 2) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "¬" + posicion + "¬" + indicador);
                     } else {
                         bst.insert(celdas[i] + "¬" + posicion + "¬" + indicador);

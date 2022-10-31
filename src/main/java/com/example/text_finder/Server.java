@@ -66,24 +66,26 @@ public class Server {
                 while (socket.isConnected())
                     try {
                         messageFromClient = bufferedReader.readLine();
+                        System.out.println(messageFromClient);
                         Nodo_Biblioteca actual = Biblioteca.biblioteca.head;
                         while (actual != null){
                             if (actual.getData().getTipo().equals("docx")){
                                 leerDocx(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
+                                    System.out.println("encontrado");
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResult);
                                 }
                             }
                             else if (actual.getData().getTipo().equals("txt")){
                                 leerTxt(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResultdef);
                                 }
                             }
                             else {
                                 leerPDF(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparacionesAVL+"  " + "Bin: "+ BinaryTree.comparacionesBin + "  "+ AVLTree.textResult);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResultdef);
                                 }
                             }
                             actual = actual.next;
@@ -162,18 +164,30 @@ public class Server {
             }
             String[] celdas = textoT.split(FieldDelimiter, -1);
             while (i != celdas.length) {
-                if(celdas[i]!="") {
+                if (celdas[i] != "") {
                     String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    bst.insert(celdas[i]+"¬"+posicion+"¬"+String.valueOf(indicador));
-                    indicador+=1;
+                    if (celdas.length - i >= 4) {
+                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                        indicador += 1;
+                    } else if (celdas.length - i == 3) {
+                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
+                    } else if (celdas.length - i == 2) {
+                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "¬" + posicion + "¬" + indicador);
+                    } else {
+                        bst.insert(celdas[i] + "¬" + posicion + "¬" + indicador);
+                    }
                 }
                 i += 1;
             }
+            try {
+                bin.Search(messageFromClient);
 
-            bst.Search(messageFromClient);
-            bin.Search(messageFromClient);
-        //    bin.Search(messageFromClient);
-            System.out.println(bst.getComparaciones());
+                bst.Search(messageFromClient);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            //    bin.Search(messageFromClient);
+            System.out.println("AVL: "+bst.getComparaciones() + " "+ "Bin: "+ bin.getComparaciones());
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
