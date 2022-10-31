@@ -57,10 +57,8 @@ public class Main extends Application {
             System.out.println("Str["+i+"]:"+str[i]);
         }
          */
-      //  this.leerDocx();
-      //  Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
 
-        //this.leerDocx();
+        //Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
     }
 
     public static void leerTxt() {
@@ -79,16 +77,25 @@ public class Main extends Application {
                 textoT += linea;
                 textoT += " ";
             }
-            String[] celdas = textoT.split(FieldDelimiter, -1);
-            while (i != celdas.length) {
-                if (celdas[i] != "") {
-                    String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    bst.insert(celdas[i] + "¬" + posicion + "¬" + String.valueOf(indicador));
-                    indicador += 1;
+            String[] palabras = textoT.split(FieldDelimiter, -1);
+            while (i != palabras.length) {
+                if (palabras[i] != "") {
+                    String posicion = String.valueOf(textoT.indexOf(palabras[i]));
+                    if (palabras.length - i >=4) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "~" + palabras[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                        indicador += 1;
+                    } else if (palabras.length - i == 3) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "¬" + posicion + "¬" + indicador);
+                    } else if (palabras.length - i == 2) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "¬" + posicion + "¬" + indicador);
+                    } else {
+                        bst.insert(palabras[i] + "¬" + posicion + "¬" + indicador);
+                    }
+
                 }
                 i += 1;
+                indicador += 1;
             }
-            bst.traverse();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,7 +103,7 @@ public class Main extends Application {
 
     public static void leerDocx() {
         try {
-
+            System.out.println("Aquí");
             FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.docx");
             XWPFDocument docx = new XWPFDocument(file);
             List<XWPFParagraph> lParrafos = docx.getParagraphs();
@@ -111,24 +118,23 @@ public class Main extends Application {
                 textoT += temp;
                 textoT += " ";
             }
-            String[] celdas = textoT.split(FieldDelimiter, -1);
-            while (i != celdas.length) {
-                if (celdas[i] != "") {
-                    String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    if (celdas.length - i >= 4) {
-                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
-                        indicador += 1;
-                    } else if (celdas.length - i == 3) {
-                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
-                    } else if (celdas.length - i == 2) {
-                        bst.insert(celdas[i] + "~" + celdas[i + 1] + "¬" + posicion + "¬" + indicador);
+            String[] palabras = textoT.split(FieldDelimiter, -1);
+            while (i != palabras.length) {
+                if (palabras[i] != "") {
+                    String posicion = String.valueOf(textoT.indexOf(palabras[i]));
+                    if (palabras.length - i >=4) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "~" + palabras[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                    } else if (palabras.length - i == 3) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "¬" + posicion + "¬" + indicador);
+                    } else if (palabras.length - i == 2) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "¬" + posicion + "¬" + indicador);
                     } else {
-                        bst.insert(celdas[i] + "¬" + posicion + "¬" + indicador);
+                        bst.insert(palabras[i] + "¬" + posicion + "¬" + indicador);
                     }
                 }
                 i += 1;
+                indicador += 1;
             }
-            bst.Search("como");
             System.out.println(bst.getComparaciones());
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
@@ -168,12 +174,20 @@ public class Main extends Application {
         while (z != cad3.length) {
             if (cad3[z] != "") {
                 String posicion = String.valueOf(textoT.indexOf(cad3[z]));
-                bst.insert(cad3[z] + "¬" + posicion + "¬" + String.valueOf(indicador));
-                indicador += 1;
+                if (cad3.length - z >=4) {
+                    bst.insert(cad3[z] + "~" + cad3[z+ 1] + "~" + cad3[z + 2] + "~" + cad3[z + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                } else if (cad3.length - z == 3) {
+                    bst.insert(cad3[z] + "~" + cad3[z + 1] + "~" + cad3[z + 2] + "¬" + posicion + "¬" + indicador);
+                } else if (cad3.length - z == 2) {
+                    bst.insert(cad3[z] + "~" + cad3[z + 1] + "¬" + posicion + "¬" + indicador);
+                } else {
+                    bst.insert(cad3[z] + "¬" + posicion + "¬" + indicador);
+                }
             }
             z += 1;
+            indicador += 1;
         }
-        System.out.println(textoT);
+        bst.Search("Hola");
         bst.traverse();
     }
 
@@ -239,6 +253,7 @@ public class Main extends Application {
         Biblioteca.biblioteca.ordenar_nombre(Biblioteca.biblioteca.head, n);
         System.out.println("Ordenar por nombre");
         leer_biblio();
+        leerPDF();
         launch();
     }
 
