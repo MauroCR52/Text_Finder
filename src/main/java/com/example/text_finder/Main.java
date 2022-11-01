@@ -240,20 +240,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         LectorDocs();
-        System.out.println("Lista sin ordenar");
-        leer_biblio();
-        System.out.println("\n");
-        Biblioteca.biblioteca.ordenar_fecha();
-        System.out.println("Ordenar por fecha");
-        leer_biblio();
-        System.out.println("\n");
-        Nodo_Biblioteca n = Biblioteca.biblioteca.head;
-        while (n.next != null)
-            n = n.next;
-        Biblioteca.biblioteca.ordenar_nombre(Biblioteca.biblioteca.head, n);
-        System.out.println("Ordenar por nombre");
-        leer_biblio();
-        leerPDF();
         launch();
     }
 
@@ -327,13 +313,5 @@ public class Main extends Application {
         lista_radix = lista.toArray(lista_radix);
 
         System.out.println(Arrays.toString(lista_radix));
-    }
-
-    public static void leer_biblio() {
-        Nodo_Biblioteca actual = Biblioteca.biblioteca.head;
-        while (actual != null) {
-            System.out.println(actual.getData().getNombre() + " " + actual.getData().getFecha() + " " + actual.getData().getTamano());
-            actual = actual.next;
-        }
     }
 }

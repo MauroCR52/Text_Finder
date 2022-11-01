@@ -60,6 +60,7 @@ public class Server {
     }
 
     public void receiveMessageFromClient(VBox vBox) {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -72,20 +73,19 @@ public class Server {
                             if (actual.getData().getTipo().equals("docx")){
                                 leerDocx(actual.getData().getDireccion());
                                 if(encontrado){
-                                    System.out.println("encontrado");
                                     sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResult);
                                 }
                             }
                             else if (actual.getData().getTipo().equals("txt")){
                                 leerTxt(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResultdef);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResult);
                                 }
                             }
                             else {
                                 leerPDF(actual.getData().getDireccion());
                                 if(encontrado){
-                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResultdef);
+                                    sendMessageToClient(actual.getData().getNombre()+ "  "+ "AVL: "+AVLTree.comparaciones +"  " + "Bin: "+ BinaryTree.comparaciones + "  "+ AVLTree.textResult);
                                 }
                             }
                             actual = actual.next;
@@ -120,27 +120,45 @@ public class Server {
         BufferedReader lector;
         Tree<String> bst = new AVLTree<>();
         Tree<String> bin = new BinaryTree<>();
-        int indicador =0;
+        int indicador = 0;
         try {
             lector = new BufferedReader(new FileReader(ArchivoDoc));
             String linea;
-            String textoT="";
+            String textoT = "";
             int i = 0;
             while ((linea = lector.readLine()) != null) { //Sirve para que la lectura se haga hasta que la línea sea nula.
-                textoT+=linea;
-                textoT+=" ";
+                textoT += linea;
+                textoT += " ";
             }
-            String[] celdas = textoT.split(FieldDelimiter, -1);
-            while (i != celdas.length) {
-                if(celdas[i]!="") {
-                    String posicion = String.valueOf(textoT.indexOf(celdas[i]));
-                    bst.insert(celdas[i]+"¬"+posicion+"¬"+String.valueOf(indicador));
-                    indicador+=1;
+            String[] palabras = textoT.split(FieldDelimiter, -1);
+            while (i != palabras.length) {
+                if (palabras[i] != "") {
+                    String posicion = String.valueOf(textoT.indexOf(palabras[i]));
+                    if (palabras.length - i >=4) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "~" + palabras[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                        bin.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "~" + palabras[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                        indicador += 1;
+                    } else if (palabras.length - i == 3) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "¬" + posicion + "¬" + indicador);
+                    } else if (palabras.length - i == 2) {
+                        bst.insert(palabras[i] + "~" + palabras[i + 1] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(palabras[i] + "~" + palabras[i + 1] + "¬" + posicion + "¬" + indicador);
+                    } else {
+                        bst.insert(palabras[i] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(palabras[i] + "¬" + posicion + "¬" + indicador);
+                    }
+
                 }
                 i += 1;
+                indicador += 1;
             }
-            bst.Search(messageFromClient);
-            bin.Search(messageFromClient);
+            try {
+                bin.Search(messageFromClient);
+                bst.Search(messageFromClient);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -168,20 +186,24 @@ public class Server {
                     String posicion = String.valueOf(textoT.indexOf(celdas[i]));
                     if (celdas.length - i >= 4) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                        bin.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
                         indicador += 1;
                     } else if (celdas.length - i == 3) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
                     } else if (celdas.length - i == 2) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(celdas[i] + "~" + celdas[i + 1] + "¬" + posicion + "¬" + indicador);
                     } else {
                         bst.insert(celdas[i] + "¬" + posicion + "¬" + indicador);
+                        bin.insert(celdas[i] + "¬" + posicion + "¬" + indicador);
                     }
                 }
                 i += 1;
             }
             try {
                 bin.Search(messageFromClient);
-
+                System.out.println(bin.getComparaciones());
                 bst.Search(messageFromClient);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -226,13 +248,29 @@ public class Server {
         while (z != cad3.length) {
             if (cad3[z] != "") {
                 String posicion = String.valueOf(textoT.indexOf(cad3[z]));
-                bst.insert(cad3[z]+"¬"+posicion+"¬"+String.valueOf(indicador));
-                indicador+=1;
+                if (cad3.length - z >=4) {
+                    bst.insert(cad3[z] + "~" + cad3[z+ 1] + "~" + cad3[z + 2] + "~" + cad3[z + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                    bin.insert(cad3[z] + "~" + cad3[z+ 1] + "~" + cad3[z + 2] + "~" + cad3[z + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
+                } else if (cad3.length - z == 3) {
+                    bst.insert(cad3[z] + "~" + cad3[z + 1] + "~" + cad3[z + 2] + "¬" + posicion + "¬" + indicador);
+                    bin.insert(cad3[z] + "~" + cad3[z + 1] + "~" + cad3[z + 2] + "¬" + posicion + "¬" + indicador);
+                } else if (cad3.length - z == 2) {
+                    bst.insert(cad3[z] + "~" + cad3[z + 1] + "¬" + posicion + "¬" + indicador);
+                    bin.insert(cad3[z] + "~" + cad3[z + 1] + "¬" + posicion + "¬" + indicador);
+                } else {
+                    bst.insert(cad3[z] + "¬" + posicion + "¬" + indicador);
+                    bin.insert(cad3[z] + "¬" + posicion + "¬" + indicador);
+                }
             }
             z += 1;
+            indicador += 1;
         }
-        bst.Search(messageFromClient);
-        bin.Search(messageFromClient);
+        try {
+            bin.Search(messageFromClient);
+            bst.Search(messageFromClient);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         document.close();
     }
     //Créditos para https://www.tutorialspoint.com/how-to-read-data-from-pdf-file-and-display-on-console-in-java#:~:text=Load%20an%20existing%20PDF%20document,method%20of%20the%20PDFTextStripper%20class.
@@ -352,12 +390,4 @@ public class Server {
 
         System.out.println(Arrays.toString(lista_radix));
     }
-    public static void leer_biblio(){
-        Nodo_Biblioteca actual = Biblioteca.biblioteca.head;
-        while (actual != null){
-            System.out.println(actual.getData().getNombre() + " "+ actual.getData().getFecha() + " " +actual.getData().getTamano() + " "+actual.getData().getTipo());
-            actual = actual.next;
-        }
-    }
-
 }

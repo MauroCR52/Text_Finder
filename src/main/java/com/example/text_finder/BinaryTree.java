@@ -267,6 +267,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             }
 
         }
+
         return NodoBin;
 
     }
