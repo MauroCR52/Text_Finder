@@ -1,11 +1,9 @@
 package com.example.text_finder;
 
-import java.util.Objects;
-
 public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     private NodoBin<T> root;
-    private String textResult = "";
-    private int comparaciones=0;
+    public static String textResult = "";
+    public static int comparaciones =0;
     private int apariciones=0;
     private String textResultdef;
     private String ultpal="";
@@ -93,7 +91,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
     @Override
     public void setComparaciones(int num){
-        comparaciones=num;
+        comparaciones =num;
     }
     @Override
     public void traverse() {
@@ -111,6 +109,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void Search(String pal) {
+        setComparaciones(0);
         String[] phra = pal.split(" ", -1);
         if (phra.length > 1) {
             apariciones = 0;
@@ -119,12 +118,15 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             cont1=0;
             SearchP(phra,root,cont1);
             if (apariciones == 0) {
+                Server.encontrado = false;
                 System.out.println("La frase no se encuentra en el texto");
             } else if (apariciones == 1) {
+                Server.encontrado = true;
                 System.out.println("Tu frase fue encontrada");
                 System.out.println("Es acompañada por las siguientes palabras");
                 System.out.println(textResult);
             } else {
+                Server.encontrado = true;
                 System.out.println("Tu frase fue encontrada. Además, se encuentra más " +
                         "de una vez en el documento");
                 System.out.println("Las palabaras que acompañan a tu resultado son las " +
@@ -136,12 +138,17 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             textResult = "";
             SearchW(pal,root);
             if (apariciones == 0) {
+                Server.encontrado = false;
                 System.out.println("La palabra no se encuentra en el texto");
             } else if (apariciones == 1) {
+                Server.encontrado = true;
+
                 System.out.println("La palabra se encuentra en el texto");
                 System.out.println("Las palabras que las acompañan son las siguientes");
                 System.out.println(textResult);
             } else {
+                Server.encontrado = true;
+
                 System.out.println("La palabra se encuentra en el texto, Además está repetida");
                 System.out.println("Las palabras que acompañan a tu búsqueda son las siguientes:");
                 System.out.println(textResult);
@@ -260,6 +267,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             }
 
         }
+
         return NodoBin;
 
     }

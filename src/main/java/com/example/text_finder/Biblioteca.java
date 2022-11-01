@@ -2,7 +2,6 @@ package com.example.text_finder;
 
 public class Biblioteca {
     public Nodo_Biblioteca head;
-    public Nodo_Biblioteca tail;
     private int size;
 
     public Biblioteca() {
