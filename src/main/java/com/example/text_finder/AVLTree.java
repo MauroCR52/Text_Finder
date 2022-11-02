@@ -107,8 +107,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void Search(String pal) {
-        setComparaciones(0);
-        String[] phra = pal.split(" ", -1);
+         String[] phra = pal.split(" ", -1);
         if (phra.length > 1) {
             apariciones = 0;
             int cont1 = 0;

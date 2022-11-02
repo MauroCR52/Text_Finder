@@ -46,19 +46,6 @@ public class Main extends Application {
         stage.setTitle("Server");
         stage.setScene(scene);
         stage.show();
-
-        /*
-        String a= "soy,";
-        int b= a.length()-1;
-        //String s = "a,bdfd.gfg;djfda:dgfs?dkfjsd¿djfkldjs¡kj!-jfd_fjdjd,dfcb*fd";
-        String s="a,";
-        String[]str=s.split("[,.;:¿?¡!*]");
-        for (int i=0;i<str.length;i++){
-            System.out.println("Str["+i+"]:"+str[i]);
-        }
-         */
-
-        //Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
     }
 
     public static void leerTxt() {
@@ -309,9 +296,5 @@ public class Main extends Application {
                 Documento documento = new Documento(file.getName(), file.getPath(), cont, Integer.parseInt(sdf.format(file.lastModified())), filename.substring(index + 1));
                 Biblioteca.biblioteca.InsertarDocumento(documento);
             }
-        lista_radix = new Integer[lista.size()];
-        lista_radix = lista.toArray(lista_radix);
-
-        System.out.println(Arrays.toString(lista_radix));
     }
 }
