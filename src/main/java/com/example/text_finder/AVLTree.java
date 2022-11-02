@@ -1,5 +1,9 @@
 package com.example.text_finder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private NodoAVL<T> root;
     public static String textResult = "";
@@ -9,7 +13,8 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private AVLTree next = null;
     private int apariciones = 0;
     public static String textResultdef = "";
-
+    private List<String> ListOrden= new ArrayList<String>();
+    private List<String> porOrden = new ArrayList<String>();
     @Override
     public AVLTree<T> insert(T data) {
         root = insert(data, root);
@@ -215,9 +220,14 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         String[] temp3=temp2[0].split("~",-1);
         String comparador="";
+        String comparada = "";
         int b = temp3[0].length() - 1;
+        int bb= phra[0].length()-1;
         String z = String.valueOf(temp3[0].charAt(b));
+        String zcom= String.valueOf(phra[0].charAt(bb));
         String zz = String.valueOf(temp3[0].charAt(0));
+        String zzcom=String.valueOf(phra[0].charAt(0));
+
         if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
             String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
             comparador = tempx[0];
@@ -225,16 +235,24 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         else{
             comparador = temp3[0];
         }
-        if (phra[0].compareTo(comparador) < 0) {
+        if (zzcom.equals("¿") || zcom.equals("?") || zcom.equals(",") || zcom.equals(".") || zcom.equals(":") || zzcom.equals("¡") || zcom.equals("!")) {
+            String[] temp2x = phra[0].split("[,.;:¿?¡!*]");
+            comparada = temp2x[0];
+        } else {
+            comparada = phra[0];
+        }
+        if (comparada.compareTo(comparador) < 0) {
             NodoAVL.setLeftChild(SearchP(phra, NodoAVL.getLeftChild(),cont1));
             comparaciones++;
-        } else if (phra[0].compareTo(comparador) > 0) {
+        } else if (comparada.compareTo(comparador) > 0) {
             NodoAVL.setRightChild(SearchP(phra, NodoAVL.getRightChild(),cont1));
             comparaciones++;
         } else {
             comparaciones++;
             int i=1;
             int j= Integer.parseInt(temp2[2])+1;
+            textResult+=temp3[0];
+            textResult+=" ";
             while (i!= phra.length){
                 boolean temp4 = false;
                 textResultdef = "";
@@ -249,12 +267,6 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
             if(i==phra.length){
                 apariciones++;
-                int f=0;
-                while(phra.length-f!=0){
-                    textResult+=temp3[f];
-                    textResult+=" ";
-                    f++;
-                }
                 textResult+= ultpal;
                 if (temp.length>1 && (temp.length-cont1-1)!=0){
                     cont1++;
@@ -283,22 +295,34 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
             String[] temp3 = temp2[0].split("~", -1);
             String comparador = "";
+            String comparada = "";
             int b = temp3[0].length() - 1;
+            int bb= pal.length()-1;
             String z = String.valueOf(temp3[0].charAt(b));
+            String zcom= String.valueOf(pal.charAt(bb));
             String zz = String.valueOf(temp3[0].charAt(0));
+            String zzcom=String.valueOf(pal.charAt(0));
             if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
                 String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
                 comparador = tempx[0];
             } else {
                 comparador = temp3[0];
             }
-            if (pal.compareTo(comparador) < 0) {
+            if (zzcom.equals("¿") || zcom.equals("?") || zcom.equals(",") || zcom.equals(".") || zcom.equals(":") || zzcom.equals("¡") || zcom.equals("!")) {
+                String[] temp2x = pal.split("[,.;:¿?¡!*]");
+                comparada = temp2x[0];
+            } else {
+                comparada = pal;
+            }
+            if (comparada.compareTo(comparador) < 0) {
                 NodoAVL.setLeftChild(SearchPAux(pal, NodoAVL.getLeftChild(), y, cont1));
                 comparaciones++;
-            } else if (pal.compareTo(comparador) > 0) {
+            } else if (comparada.compareTo(comparador) > 0) {
                 NodoAVL.setRightChild(SearchPAux(pal, NodoAVL.getRightChild(), y, cont1));
                 comparaciones++;
             } else {
+                textResult+=temp3[0];
+                textResult+=" ";
                 comparaciones++;
                 textResultdef = temp2[2];
                 String tempz = "";
@@ -414,8 +438,31 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     public void backtop() {
         textResult = "";
         pos = 0;
+        //porOrden=null;
         backtopAux(root);
-        System.out.println(textResult);
+
+        int i=0;
+        while(i!=porOrden.size()){
+            int j=0;
+            String added = "";
+            while(j!=porOrden.size()){
+                String z= porOrden.get(j);
+                System.out.println(z);
+                String[] temp= z.split("¬",-1);
+                System.out.println(temp[2]);
+                if (Integer.parseInt(temp[2])==i){
+                    added= temp[0];
+                    break;
+                }
+                else{
+                    j++;
+                }
+            }
+            ListOrden.add(added);
+            i++;
+        }
+        System.out.println(ListOrden);
+
     }
 
     private void backtopAux(NodoAVL<T> NodoAVL) {
@@ -424,13 +471,15 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         backtopAux(NodoAVL.getLeftChild());
         String t = String.valueOf(NodoAVL.getData());
-        String[] temp = t.split("¬", -1);
-        comparaciones += 1;
-        if (pos == Integer.parseInt(temp[2])) {
-            textResult += String.valueOf(temp[0]);
-            textResult += " ";
-            pos++;
-            backtopAux(root);
+        String[] temp=t.split("°",-1);
+
+        if (temp.length>1) {
+            for(int w=0;w< temp.length;w++){
+                porOrden.add(temp[w]);
+            }
+        }
+        else{
+            porOrden.add(t);
         }
         backtopAux(NodoAVL.getRightChild());
     }

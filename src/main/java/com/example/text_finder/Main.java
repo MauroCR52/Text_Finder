@@ -47,18 +47,6 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        /*
-        String a= "soy,";
-        int b= a.length()-1;
-        //String s = "a,bdfd.gfg;djfda:dgfs?dkfjsd¿djfkldjs¡kj!-jfd_fjdjd,dfcb*fd";
-        String s="a,";
-        String[]str=s.split("[,.;:¿?¡!*]");
-        for (int i=0;i<str.length;i++){
-            System.out.println("Str["+i+"]:"+str[i]);
-        }
-         */
-
-        //Server.sendMessageToClient("Bienvenido a Text Finder, escribe la palabra o frase que deseas buscar.");
     }
 
     public static void leerTxt() {
@@ -107,7 +95,7 @@ public class Main extends Application {
             FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.docx");
             XWPFDocument docx = new XWPFDocument(file);
             List<XWPFParagraph> lParrafos = docx.getParagraphs();
-            Tree<String> bst = new BinaryTree<>();
+            Tree<String> bst = new AVLTree<>();
             bst.setComparaciones(0);
             String textoT = "";
             String FieldDelimiter = " ";
@@ -135,7 +123,10 @@ public class Main extends Application {
                 i += 1;
                 indicador += 1;
             }
+            bst.Search("Micaelo, en este documento, estaré");
             System.out.println(bst.getComparaciones());
+            //bst.traverse();
+            //bst.backtop();
         } catch (IOException e) {
             System.setProperty("log4j.configurationFile", "./path_to_the_log4j2_config_file/log4j2.xml");
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
@@ -155,7 +146,7 @@ public class Main extends Application {
         int indicador = 0;
         int i = 0;
         int z = 0;
-        Tree<String> bst = new BinaryTree<>();
+        Tree<String> bst = new AVLTree<>();
         bst.setComparaciones(0);
         StringBuilder textoT = new StringBuilder();
         while (i != cad.length) {
@@ -189,6 +180,7 @@ public class Main extends Application {
         }
         bst.Search("Hola");
         bst.traverse();
+
     }
 
     //Créditos para https://www.tutorialspoint.com/how-to-read-data-from-pdf-file-and-display-on-console-in-java#:~:text=Load%20an%20existing%20PDF%20document,method%20of%20the%20PDFTextStripper%20class.
@@ -240,6 +232,20 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         LectorDocs();
+        System.out.println("Lista sin ordenar");
+        leer_biblio();
+        System.out.println("\n");
+        Biblioteca.biblioteca.ordenar_fecha();
+        System.out.println("Ordenar por fecha");
+        leer_biblio();
+        System.out.println("\n");
+        Nodo_Biblioteca n = Biblioteca.biblioteca.head;
+        while (n.next != null)
+            n = n.next;
+        Biblioteca.biblioteca.ordenar_nombre(Biblioteca.biblioteca.head, n);
+        System.out.println("Ordenar por nombre");
+        leer_biblio();
+        leerDocx();
         launch();
     }
 
@@ -313,5 +319,13 @@ public class Main extends Application {
         lista_radix = lista.toArray(lista_radix);
 
         System.out.println(Arrays.toString(lista_radix));
+    }
+
+    public static void leer_biblio() {
+        Nodo_Biblioteca actual = Biblioteca.biblioteca.head;
+        while (actual != null) {
+            System.out.println(actual.getData().getNombre() + " " + actual.getData().getFecha() + " " + actual.getData().getTamano());
+            actual = actual.next;
+        }
     }
 }
