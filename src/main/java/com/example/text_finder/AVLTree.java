@@ -13,6 +13,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private AVLTree next = null;
     private int apariciones = 0;
     public static String textResultdef = "";
+    public static String textResultTemp = "";
     private List<String> ListOrden = new ArrayList<String>();
     private List<String> porOrden = new ArrayList<String>();
 
@@ -117,6 +118,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             apariciones = 0;
             int cont1 = 0;
             textResult = "";
+            textResultTemp="";
             cont1 = 0;
             SearchP(phra, root, cont1);
             if (apariciones == 0) {
@@ -248,21 +250,23 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             comparaciones++;
             int i = 1;
             int j = Integer.parseInt(temp2[2]) + 1;
-            textResult += temp3[0];
-            textResult += " ";
+            textResultTemp += temp3[0];
+            textResultTemp += " ";
             while (i != phra.length) {
                 boolean temp4 = false;
                 textResultdef = "";
                 SearchPAux(phra[i], root, temp4, cont1);
                 System.out.println(textResultdef);
-                String[] temp5 = textResultdef.split(" ", -1);
+                String[] temp5 = textResultdef.split("¬", -1);
                 int u = 0;
                 boolean imcrying = false;
-                while (textResult.length() != u) {
-                    if (temp5[u] != "" && j == Integer.parseInt(temp5[u])) {
+                while (temp5.length != u) {
+                    String[] temp6=temp5[u].split("°",-1);
+                    if (temp6[0] != "" && j == Integer.parseInt(temp6[0])) {
                         i += 1;
                         j += 1;
                         imcrying=true;
+                        ultpal=temp6[1];
                         break;
                     }
                     else{
@@ -277,10 +281,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
             if (i == phra.length) {
                 apariciones++;
-                textResult += ultpal;
+                textResult+=(textResultTemp + ultpal);
                 if (temp.length > 1 && (temp.length - cont1 - 1) != 0) {
                     cont1++;
-                    textResult += "\n";
+                    textResultTemp="";
                     SearchP(phra, root, cont1);
 
                 }
@@ -333,32 +337,36 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             } else {
                 if (temp.length > 1) {
                     int w = 0;
-
+                    textResultTemp+=temp3[0];
+                    textResultTemp+=" ";
                     while (temp.length != w) {
                         temp2 = temp[w].split("¬", -1);
                         textResultdef += temp2[2];
-                        System.out.println(temp2[2]);
-                        textResultdef += " ";
+                        textResultdef +="°";
+                        temp3= temp2[0].split("~",-1);
+                        textResultdef+=temp3[1];
+                        textResultdef+=" ";
+                        textResultdef+=temp3[2];
+                        textResultdef+=" ";
+                        textResultdef+=temp3[3];
+                        textResultdef += "¬";
                         w++;
                     }
                 } else {
-                    textResult += temp3[0];
-                    textResult += " ";
+                    textResultTemp += temp3[0];
+                    textResultTemp += " ";
                     comparaciones++;
                     textResultdef += temp2[2];
-                    textResult += " ";
+                    textResultdef += " ";
                     String tempz = "";
+                    int length = temp3.length;
+                    for (int w = 1; w < length; w++) {
+                        tempz += temp3[w];
+                        tempz += " ";
+                    }
+                    ultpal = tempz;
                 }
                 y = true;
-                /*
-                int length = temp3.length;
-                for (int w = 1; w < length; w++) {
-                    tempz += temp3[w];
-                    tempz += " ";
-                }
-                ultpal = tempz;
-
-                 */
             }
         }
         return NodoAVL;
