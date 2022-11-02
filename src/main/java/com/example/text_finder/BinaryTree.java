@@ -259,7 +259,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
                 boolean temp4 = false;
                 textResultdef = "";
                 SearchPAux(phra[i],root,temp4,cont1);
-                if (j==Integer.parseInt(textResultdef)){
+                if (textResultdef!="" && j==Integer.parseInt(textResultdef)){
                     i+=1;
                     j+=1;
                 }

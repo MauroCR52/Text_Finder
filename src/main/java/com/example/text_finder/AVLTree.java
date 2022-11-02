@@ -13,8 +13,9 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private AVLTree next = null;
     private int apariciones = 0;
     public static String textResultdef = "";
-    private List<String> ListOrden= new ArrayList<String>();
+    private List<String> ListOrden = new ArrayList<String>();
     private List<String> porOrden = new ArrayList<String>();
+
     @Override
     public AVLTree<T> insert(T data) {
         root = insert(data, root);
@@ -28,29 +29,27 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         String t = String.valueOf(NodoAVL.getData());
         String[] temp = t.split("¬", -1);
-        String[] temp2=temp[0].split("~",-1);
-        String[] temp3=String.valueOf(data).split("¬", -1);
-        String[] temp4= temp3[0].split("~",-1);
-        String comparador1="";
-        String comparador2="";
+        String[] temp2 = temp[0].split("~", -1);
+        String[] temp3 = String.valueOf(data).split("¬", -1);
+        String[] temp4 = temp3[0].split("~", -1);
+        String comparador1 = "";
+        String comparador2 = "";
         int b = temp2[0].length() - 1;
         String z = String.valueOf(temp2[0].charAt(b));
-        String za= String.valueOf(temp2[0].charAt(0));
-        int bb= temp4[0].length() - 1;
+        String za = String.valueOf(temp2[0].charAt(0));
+        int bb = temp4[0].length() - 1;
         String zz = String.valueOf(temp4[0].charAt(bb));
         String zza = String.valueOf(temp4[0].charAt(0));
         if (za.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || za.equals("¡") || z.equals("!")) {
             String[] tempx = temp2[0].split("[,.;:¿?¡!*]");
             comparador1 = tempx[0];
-        }
-        else{
+        } else {
             comparador1 = temp2[0];
         }
         if (zza.equals("¿") || zz.equals("?") || zz.equals(",") || zz.equals(".") || zz.equals(":") || zza.equals("¡") || zz.equals("!")) {
             String[] tempxx = temp4[0].split("[,.;:¿?¡!*]");
             comparador2 = tempxx[0];
-        }
-        else{
+        } else {
             comparador2 = temp4[0];
         }
         if (comparador2.compareTo(comparador1) < 0) {
@@ -58,9 +57,9 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         } else if (comparador2.compareTo(comparador1) > 0) {
             NodoAVL.setRightChild(insert(data, NodoAVL.getRightChild()));
         } else {
-            String y =(String.valueOf(NodoAVL.getData()));
-            y+="°";
-            y+= String.valueOf(data);
+            String y = (String.valueOf(NodoAVL.getData()));
+            y += "°";
+            y += String.valueOf(data);
             NodoAVL.setData((T) y);
             //NodoAVL.setRightChild(insert(data, NodoAVL.getRightChild()));
         }
@@ -117,9 +116,9 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         if (phra.length > 1) {
             apariciones = 0;
             int cont1 = 0;
-            textResult="";
-            cont1=0;
-            SearchP(phra,root,cont1);
+            textResult = "";
+            cont1 = 0;
+            SearchP(phra, root, cont1);
             if (apariciones == 0) {
                 Server.encontrado = false;
                 System.out.println("La frase no se encuentra en el texto");
@@ -139,7 +138,7 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         } else {
             apariciones = 0;
             textResult = "";
-            SearchW(pal,root);
+            SearchW(pal, root);
             if (apariciones == 0) {
                 Server.encontrado = false;
                 System.out.println("La palabra no se encuentra en el texto");
@@ -156,83 +155,81 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
         }
     }
+
     private NodoAVL<T> SearchW(String pal, NodoAVL<T> NodoAVL) {
         if (NodoAVL == null) {
             return NodoAVL;
         }
         String t = String.valueOf(NodoAVL.getData());
-        String[] temp= t.split("°",-1);
+        String[] temp = t.split("°", -1);
         String[] temp2 = temp[0].split("¬", -1);
-        String[] temp3=temp2[0].split("~",-1);
-        String comparador="";
+        String[] temp3 = temp2[0].split("~", -1);
+        String comparador = "";
         int b = temp3[0].length() - 1;
         String z = String.valueOf(temp3[0].charAt(b));
         if (z.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || z.equals("¡") || z.equals("!")) {
             String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
             comparador = tempx[0];
-        }
-        else{
+        } else {
             comparador = temp3[0];
         }
 
         if (pal.compareTo(comparador) < 0) {
             NodoAVL.setLeftChild(SearchW(pal, NodoAVL.getLeftChild()));
             comparaciones++;
-        }
-        else if (pal.compareTo(comparador) > 0) {
+        } else if (pal.compareTo(comparador) > 0) {
             NodoAVL.setRightChild(SearchW(pal, NodoAVL.getRightChild()));
             comparaciones++;
         } else {
             apariciones++;
             comparaciones++;
             int length = temp3.length;
-            for (int w =0; w < length; w++) {
-                textResult+=temp3[w];
-                textResult+=" ";
+            for (int w = 0; w < length; w++) {
+                textResult += temp3[w];
+                textResult += " ";
             }
-            if(temp.length>1){
+            if (temp.length > 1) {
                 apariciones++;
-                for(int uu=1;uu<temp.length;uu++) {
-                    textResult+="\n";
+                for (int uu = 1; uu < temp.length; uu++) {
+                    textResult += "\n";
                     temp2 = temp[uu].split("¬", -1);
                     temp3 = temp2[0].split("~", -1);
-                    for(int pp=0;pp<temp3.length;pp++){
-                        textResult+=temp3[pp];
-                        textResult+=" ";
+                    for (int pp = 0; pp < temp3.length; pp++) {
+                        textResult += temp3[pp];
+                        textResult += " ";
                     }
                 }
             }
         }
         return NodoAVL;
     }
+
     private NodoAVL<T> SearchP(String[] phra, NodoAVL<T> NodoAVL, int cont1) {
         if (NodoAVL == null) {
             return NodoAVL;
         }
         String t = String.valueOf(NodoAVL.getData());
-        String[] temp=t.split("°",-1);
+        String[] temp = t.split("°", -1);
         String[] temp2;
-        if ((temp.length)-cont1>0){
+        if ((temp.length) - cont1 > 0) {
             temp2 = temp[cont1].split("¬", -1);
+        } else {
+            temp2 = temp[0].split("¬", -1);
         }
-        else{
-            temp2= temp[0].split("¬", -1);
-        }
-        String[] temp3=temp2[0].split("~",-1);
-        String comparador="";
+        String[] temp3 = temp2[0].split("~", -1);
+        String comparador = "";
         String comparada = "";
         int b = temp3[0].length() - 1;
-        int bb= phra[0].length()-1;
+        int bb = phra[0].length() - 1;
         String z = String.valueOf(temp3[0].charAt(b));
-        String zcom= String.valueOf(phra[0].charAt(bb));
+        String zcom = String.valueOf(phra[0].charAt(bb));
         String zz = String.valueOf(temp3[0].charAt(0));
-        String zzcom=String.valueOf(phra[0].charAt(0));
+        String zzcom = String.valueOf(phra[0].charAt(0));
 
         if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
             String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
             comparador = tempx[0];
-        }
-        else{
+        } else {
             comparador = temp3[0];
         }
         if (zzcom.equals("¿") || zcom.equals("?") || zcom.equals(",") || zcom.equals(".") || zcom.equals(":") || zzcom.equals("¡") || zcom.equals("!")) {
@@ -242,36 +239,49 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             comparada = phra[0];
         }
         if (comparada.compareTo(comparador) < 0) {
-            NodoAVL.setLeftChild(SearchP(phra, NodoAVL.getLeftChild(),cont1));
+            NodoAVL.setLeftChild(SearchP(phra, NodoAVL.getLeftChild(), cont1));
             comparaciones++;
         } else if (comparada.compareTo(comparador) > 0) {
-            NodoAVL.setRightChild(SearchP(phra, NodoAVL.getRightChild(),cont1));
+            NodoAVL.setRightChild(SearchP(phra, NodoAVL.getRightChild(), cont1));
             comparaciones++;
         } else {
             comparaciones++;
-            int i=1;
-            int j= Integer.parseInt(temp2[2])+1;
-            textResult+=temp3[0];
-            textResult+=" ";
-            while (i!= phra.length){
+            int i = 1;
+            int j = Integer.parseInt(temp2[2]) + 1;
+            textResult += temp3[0];
+            textResult += " ";
+            while (i != phra.length) {
                 boolean temp4 = false;
                 textResultdef = "";
-                SearchPAux(phra[i],root,temp4,cont1);
-                if (j==Integer.parseInt(textResultdef)){
-                    i+=1;
-                    j+=1;
+                SearchPAux(phra[i], root, temp4, cont1);
+                System.out.println(textResultdef);
+                String[] temp5 = textResultdef.split(" ", -1);
+                int u = 0;
+                boolean imcrying = false;
+                while (textResult.length() != u) {
+                    if (temp5[u] != "" && j == Integer.parseInt(temp5[u])) {
+                        i += 1;
+                        j += 1;
+                        imcrying=true;
+                        break;
+                    }
+                    else{
+                        u++;
+                    }
+
                 }
-                else{
+                if(!imcrying){
                     break;
                 }
+
             }
-            if(i==phra.length){
+            if (i == phra.length) {
                 apariciones++;
-                textResult+= ultpal;
-                if (temp.length>1 && (temp.length-cont1-1)!=0){
+                textResult += ultpal;
+                if (temp.length > 1 && (temp.length - cont1 - 1) != 0) {
                     cont1++;
-                    textResult+="\n";
-                    SearchP(phra,root,cont1);
+                    textResult += "\n";
+                    SearchP(phra, root, cont1);
 
                 }
             }
@@ -279,29 +289,29 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoAVL;
     }
+
     private NodoAVL<T> SearchPAux(String pal, NodoAVL<T> NodoAVL, boolean y, int cont1) {
-        if(!y) {
+        if (!y) {
             if (NodoAVL == null) {
                 return NodoAVL;
             }
             String t = String.valueOf(NodoAVL.getData());
-            String[] temp=t.split("°",-1);
+            String[] temp = t.split("°", -1);
             String[] temp2;
-            if ((temp.length)-cont1>0){
+            if ((temp.length) - cont1 > 0) {
                 temp2 = temp[cont1].split("¬", -1);
-            }
-            else{
-                temp2= temp[0].split("¬", -1);
+            } else {
+                temp2 = temp[0].split("¬", -1);
             }
             String[] temp3 = temp2[0].split("~", -1);
             String comparador = "";
             String comparada = "";
             int b = temp3[0].length() - 1;
-            int bb= pal.length()-1;
+            int bb = pal.length() - 1;
             String z = String.valueOf(temp3[0].charAt(b));
-            String zcom= String.valueOf(pal.charAt(bb));
+            String zcom = String.valueOf(pal.charAt(bb));
             String zz = String.valueOf(temp3[0].charAt(0));
-            String zzcom=String.valueOf(pal.charAt(0));
+            String zzcom = String.valueOf(pal.charAt(0));
             if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
                 String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
                 comparador = tempx[0];
@@ -321,17 +331,34 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
                 NodoAVL.setRightChild(SearchPAux(pal, NodoAVL.getRightChild(), y, cont1));
                 comparaciones++;
             } else {
-                textResult+=temp3[0];
-                textResult+=" ";
-                comparaciones++;
-                textResultdef = temp2[2];
-                String tempz = "";
+                if (temp.length > 1) {
+                    int w = 0;
+
+                    while (temp.length != w) {
+                        temp2 = temp[w].split("¬", -1);
+                        textResultdef += temp2[2];
+                        System.out.println(temp2[2]);
+                        textResultdef += " ";
+                        w++;
+                    }
+                } else {
+                    textResult += temp3[0];
+                    textResult += " ";
+                    comparaciones++;
+                    textResultdef += temp2[2];
+                    textResult += " ";
+                    String tempz = "";
+                }
+                y = true;
+                /*
                 int length = temp3.length;
                 for (int w = 1; w < length; w++) {
                     tempz += temp3[w];
                     tempz += " ";
                 }
                 ultpal = tempz;
+
+                 */
             }
         }
         return NodoAVL;
@@ -430,10 +457,12 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     public int getComparaciones() {
         return comparaciones;
     }
+
     @Override
-    public void setComparaciones(int num){
-        comparaciones =num;
+    public void setComparaciones(int num) {
+        comparaciones = num;
     }
+
     @Override
     public void backtop() {
         textResult = "";
@@ -441,20 +470,19 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         //porOrden=null;
         backtopAux(root);
 
-        int i=0;
-        while(i!=porOrden.size()){
-            int j=0;
+        int i = 0;
+        while (i != porOrden.size()) {
+            int j = 0;
             String added = "";
-            while(j!=porOrden.size()){
-                String z= porOrden.get(j);
+            while (j != porOrden.size()) {
+                String z = porOrden.get(j);
                 System.out.println(z);
-                String[] temp= z.split("¬",-1);
+                String[] temp = z.split("¬", -1);
                 System.out.println(temp[2]);
-                if (Integer.parseInt(temp[2])==i){
-                    added= temp[0];
+                if (Integer.parseInt(temp[2]) == i) {
+                    added = temp[0];
                     break;
-                }
-                else{
+                } else {
                     j++;
                 }
             }
@@ -471,14 +499,13 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         backtopAux(NodoAVL.getLeftChild());
         String t = String.valueOf(NodoAVL.getData());
-        String[] temp=t.split("°",-1);
+        String[] temp = t.split("°", -1);
 
-        if (temp.length>1) {
-            for(int w=0;w< temp.length;w++){
+        if (temp.length > 1) {
+            for (int w = 0; w < temp.length; w++) {
                 porOrden.add(temp[w]);
             }
-        }
-        else{
+        } else {
             porOrden.add(t);
         }
         backtopAux(NodoAVL.getRightChild());

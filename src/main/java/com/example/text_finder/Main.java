@@ -71,7 +71,6 @@ public class Main extends Application {
                     String posicion = String.valueOf(textoT.indexOf(palabras[i]));
                     if (palabras.length - i >=4) {
                         bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "~" + palabras[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
-                        indicador += 1;
                     } else if (palabras.length - i == 3) {
                         bst.insert(palabras[i] + "~" + palabras[i + 1] + "~" + palabras[i + 2] + "¬" + posicion + "¬" + indicador);
                     } else if (palabras.length - i == 2) {
@@ -92,7 +91,7 @@ public class Main extends Application {
     public static void leerDocx() {
         try {
             System.out.println("Aquí");
-            FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.docx");
+            FileInputStream file = new FileInputStream("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\src\\main\\java\\Documentos\\Zorro.docx");
             XWPFDocument docx = new XWPFDocument(file);
             List<XWPFParagraph> lParrafos = docx.getParagraphs();
             Tree<String> bst = new AVLTree<>();
@@ -123,7 +122,7 @@ public class Main extends Application {
                 i += 1;
                 indicador += 1;
             }
-            bst.Search("Micaelo, en este documento, estaré");
+            bst.Search("niña deseaba");
             System.out.println(bst.getComparaciones());
             //bst.traverse();
             //bst.backtop();
@@ -136,7 +135,7 @@ public class Main extends Application {
     //Créditos para https://www.youtube.com/watch?v=CCgcMGdKurw
 
     public static void leerPDF() throws IOException {
-        File file = new File("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\Prueba.pdf");
+        File file = new File("C:\\Users\\Alvaro Duarte\\Documents\\GitHub\\Text_Finder\\src\\main\\java\\Documentos\\Arroz.pdf");
         PDDocument document = PDDocument.load(file);
         //Instantiate PDFTextStripper class
         PDFTextStripper pdfStripper = new PDFTextStripper();
@@ -155,13 +154,13 @@ public class Main extends Application {
             while (j != cad2.length) {
                 if (cad2[j] != "") {
                     textoT.append(cad2[j]);
-                    textoT.append(" ");
+                    textoT.append("°");
                 }
                 j += 1;
             }
             i += 1;
         }
-        String[] cad3 = textoT.toString().split(" ", -1);
+        String[] cad3 = textoT.toString().split("°", -1);
         while (z != cad3.length) {
             if (cad3[z] != "") {
                 String posicion = String.valueOf(textoT.indexOf(cad3[z]));
@@ -178,8 +177,7 @@ public class Main extends Application {
             z += 1;
             indicador += 1;
         }
-        bst.Search("Hola");
-        bst.traverse();
+        bst.Search("mantenerlos a");
 
     }
 
@@ -245,7 +243,7 @@ public class Main extends Application {
         Biblioteca.biblioteca.ordenar_nombre(Biblioteca.biblioteca.head, n);
         System.out.println("Ordenar por nombre");
         leer_biblio();
-        leerDocx();
+        leerPDF();
         launch();
     }
 
