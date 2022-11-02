@@ -145,7 +145,7 @@ public class Main extends Application {
         int indicador = 0;
         int i = 0;
         int z = 0;
-        Tree<String> bst = new AVLTree<>();
+        Tree<String> bst = new BinaryTree<>();
         bst.setComparaciones(0);
         StringBuilder textoT = new StringBuilder();
         while (i != cad.length) {
@@ -177,7 +177,7 @@ public class Main extends Application {
             z += 1;
             indicador += 1;
         }
-        bst.Search("mantenerlos a");
+        bst.Search("apoderado de");
 
     }
 

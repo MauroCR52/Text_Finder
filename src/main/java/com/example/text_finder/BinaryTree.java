@@ -9,6 +9,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     public static int comparaciones =0;
     private int apariciones=0;
     private String textResultdef;
+    private String textResultTemp="";
     private String ultpal="";
     private int pos=0;
     private List<String> ListOrden= new ArrayList<String>();
@@ -120,6 +121,7 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             apariciones = 0;
             int cont1 = 0;
             textResult="";
+            textResultTemp="";
             cont1=0;
             SearchP(phra,root,cont1);
             if (apariciones == 0) {
@@ -212,29 +214,27 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             return NodoBin;
         }
         String t = String.valueOf(NodoBin.getData());
-        String[] temp=t.split("°",-1);
+        String[] temp = t.split("°", -1);
         String[] temp2;
-        if ((temp.length)-cont1>0){
+        if ((temp.length) - cont1 > 0) {
             temp2 = temp[cont1].split("¬", -1);
+        } else {
+            temp2 = temp[0].split("¬", -1);
         }
-        else{
-            temp2= temp[0].split("¬", -1);
-        }
-        String[] temp3=temp2[0].split("~",-1);
-        String comparador="";
+        String[] temp3 = temp2[0].split("~", -1);
+        String comparador = "";
         String comparada = "";
         int b = temp3[0].length() - 1;
-        int bb= phra[0].length()-1;
+        int bb = phra[0].length() - 1;
         String z = String.valueOf(temp3[0].charAt(b));
-        String zcom= String.valueOf(phra[0].charAt(bb));
+        String zcom = String.valueOf(phra[0].charAt(bb));
         String zz = String.valueOf(temp3[0].charAt(0));
-        String zzcom=String.valueOf(phra[0].charAt(0));
+        String zzcom = String.valueOf(phra[0].charAt(0));
 
         if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
             String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
             comparador = tempx[0];
-        }
-        else{
+        } else {
             comparador = temp3[0];
         }
         if (zzcom.equals("¿") || zcom.equals("?") || zcom.equals(",") || zcom.equals(".") || zcom.equals(":") || zzcom.equals("¡") || zcom.equals("!")) {
@@ -244,36 +244,51 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             comparada = phra[0];
         }
         if (comparada.compareTo(comparador) < 0) {
-            NodoBin.setLeftChild(SearchP(phra, NodoBin.getLeftChild(),cont1));
+            NodoBin.setLeftChild(SearchP(phra, NodoBin.getLeftChild(), cont1));
             comparaciones++;
         } else if (comparada.compareTo(comparador) > 0) {
-            NodoBin.setRightChild(SearchP(phra, NodoBin.getRightChild(),cont1));
+            NodoBin.setRightChild(SearchP(phra, NodoBin.getRightChild(), cont1));
             comparaciones++;
         } else {
             comparaciones++;
-            int i=1;
-            int j= Integer.parseInt(temp2[2])+1;
-            textResult+=temp3[0];
-            textResult+=" ";
-            while (i!= phra.length){
+            int i = 1;
+            int j = Integer.parseInt(temp2[2]) + 1;
+            textResultTemp += temp3[0];
+            textResultTemp += " ";
+            while (i != phra.length) {
                 boolean temp4 = false;
                 textResultdef = "";
-                SearchPAux(phra[i],root,temp4,cont1);
-                if (textResultdef!="" && j==Integer.parseInt(textResultdef)){
-                    i+=1;
-                    j+=1;
+                SearchPAux(phra[i], root, temp4, cont1);
+                System.out.println(textResultdef);
+                String[] temp5 = textResultdef.split("¬", -1);
+                int u = 0;
+                boolean imcrying = false;
+                while (temp5.length != u) {
+                    String[] temp6=temp5[u].split("°",-1);
+                    if (temp6[0] != "" && j == Integer.parseInt(temp6[0])) {
+                        i += 1;
+                        j += 1;
+                        imcrying=true;
+                        ultpal=temp6[1];
+                        break;
+                    }
+                    else{
+                        u++;
+                    }
+
                 }
-                else{
+                if(!imcrying){
                     break;
                 }
+
             }
-            if(i==phra.length){
+            if (i == phra.length) {
                 apariciones++;
-                textResult+= ultpal;
-                if (temp.length>1 && (temp.length-cont1-1)!=0){
+                textResult+=(textResultTemp + ultpal);
+                if (temp.length > 1 && (temp.length - cont1 - 1) != 0) {
                     cont1++;
-                    textResult+="\n";
-                    SearchP(phra,root,cont1);
+                    textResultTemp="";
+                    SearchP(phra, root, cont1);
 
                 }
             }
@@ -281,29 +296,29 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin;
     }
+
     private NodoBin<T> SearchPAux(String pal, NodoBin<T> NodoBin, boolean y, int cont1) {
-        if(!y) {
+        if (!y) {
             if (NodoBin == null) {
                 return NodoBin;
             }
             String t = String.valueOf(NodoBin.getData());
-            String[] temp=t.split("°",-1);
+            String[] temp = t.split("°", -1);
             String[] temp2;
-            if ((temp.length)-cont1>0){
+            if ((temp.length) - cont1 > 0) {
                 temp2 = temp[cont1].split("¬", -1);
-            }
-            else{
-                temp2= temp[0].split("¬", -1);
+            } else {
+                temp2 = temp[0].split("¬", -1);
             }
             String[] temp3 = temp2[0].split("~", -1);
             String comparador = "";
             String comparada = "";
             int b = temp3[0].length() - 1;
-            int bb= pal.length()-1;
+            int bb = pal.length() - 1;
             String z = String.valueOf(temp3[0].charAt(b));
-            String zcom= String.valueOf(pal.charAt(bb));
+            String zcom = String.valueOf(pal.charAt(bb));
             String zz = String.valueOf(temp3[0].charAt(0));
-            String zzcom=String.valueOf(pal.charAt(0));
+            String zzcom = String.valueOf(pal.charAt(0));
             if (zz.equals("¿") || z.equals("?") || z.equals(",") || z.equals(".") || z.equals(":") || zz.equals("¡") || z.equals("!")) {
                 String[] tempx = temp3[0].split("[,.;:¿?¡!*]");
                 comparador = tempx[0];
@@ -323,17 +338,38 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
                 NodoBin.setRightChild(SearchPAux(pal, NodoBin.getRightChild(), y, cont1));
                 comparaciones++;
             } else {
-                textResult+=temp3[0];
-                textResult+=" ";
-                comparaciones++;
-                textResultdef = temp2[2];
-                String tempz = "";
-                int length = temp3.length;
-                for (int w = 1; w < length; w++) {
-                    tempz += temp3[w];
-                    tempz += " ";
+                if (temp.length > 1) {
+                    int w = 0;
+                    textResultTemp+=temp3[0];
+                    textResultTemp+=" ";
+                    while (temp.length != w) {
+                        temp2 = temp[w].split("¬", -1);
+                        textResultdef += temp2[2];
+                        textResultdef +="°";
+                        temp3= temp2[0].split("~",-1);
+                        textResultdef+=temp3[1];
+                        textResultdef+=" ";
+                        textResultdef+=temp3[2];
+                        textResultdef+=" ";
+                        textResultdef+=temp3[3];
+                        textResultdef += "¬";
+                        w++;
+                    }
+                } else {
+                    textResultTemp += temp3[0];
+                    textResultTemp += " ";
+                    comparaciones++;
+                    textResultdef += temp2[2];
+                    textResultdef += " ";
+                    String tempz = "";
+                    int length = temp3.length;
+                    for (int w = 1; w < length; w++) {
+                        tempz += temp3[w];
+                        tempz += " ";
+                    }
+                    ultpal = tempz;
                 }
-                ultpal = tempz;
+                y = true;
             }
         }
         return NodoBin;
