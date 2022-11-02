@@ -1,5 +1,10 @@
 package com.example.text_finder;
 
+/**
+ *Clase que permite la gestion del arbol binario
+ * @param <T>
+ */
+
 public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     private NodoBin<T> root;
     public static String textResult = "";
@@ -8,12 +13,23 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     private String textResultdef;
     private String ultpal="";
     private int pos=0;
+    /**
+     * Metodo que inserta nodos al arbol
+     * @param data
+     * @return
+     */
 
     @Override
     public BinaryTree<T> insert(T data) {
         root = insert(data, root);
         return this;
     }
+    /**
+     * Metodo que inserta palabras al nodo
+     * @param data
+     * @param NodoBin
+     * @return
+     */
     private NodoBin<T> insert(T data, NodoBin<T> NodoBin) {
         if (NodoBin == null) {
             return new NodoBin<>(data);
@@ -57,11 +73,21 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin;
     }
+    /**
+     * metodo que borra un nodo del arbol
+     * @param data
+     */
 
     @Override
     public void delete(T data) {
         root = delete(data, root);
     }
+    /**
+     * Metodo que borra data de un nodo
+     * @param data
+     * @param NodoBin
+     * @return
+     */
 
     private NodoBin<T> delete(T data, NodoBin<T> NodoBin) {
         if (NodoBin == null) {
@@ -93,10 +119,17 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     public void setComparaciones(int num){
         comparaciones =num;
     }
+    /**
+     * Metodo para llamar a una funcion de recorrido in order
+     */
     @Override
     public void traverse() {
         traverseInOrder(root);
     }
+    /**
+     * Metodo que realiza recorrido in order
+     * @param NodoBin
+     */
 
     private void traverseInOrder(NodoBin<T> NodoBin) {
         if (NodoBin == null) {
@@ -106,7 +139,10 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         System.out.println(NodoBin);
         traverseInOrder(NodoBin.getRightChild());
     }
-
+    /**
+     * Metodo que busca una palabra en un arbol
+     * @param pal
+     */
     @Override
     public void Search(String pal) {
         setComparaciones(0);
@@ -155,6 +191,12 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
             }
         }
     }
+    /**
+     * Metodo para buscar una palabra
+     * @param pal
+     * @param NodoBin
+     * @return
+     */
     private NodoBin<T> SearchW(String pal, NodoBin<T> NodoBin) {
         if (NodoBin == null) {
             return NodoBin;
@@ -202,6 +244,13 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin;
     }
+    /**
+     * Metodo para buscar una frase
+     * @param phra
+     * @param NodoBin
+     * @param cont1
+     * @return
+     */
     private NodoBin<T> SearchP(String[] phra, NodoBin<T> NodoBin, int cont1) {
         if (NodoBin == null) {
             return NodoBin;
@@ -271,7 +320,14 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         return NodoBin;
 
     }
-
+    /**
+     * Metodo auxiliar para buscar las palabras que le siguen a la encontrada
+     * @param pal
+     * @param NodoBin
+     * @param y
+     * @param cont1
+     * @return
+     */
     //Muestra las palabras que le siguen a la palabra que coincidió
     private NodoBin<T> SearchPAux(String pal, NodoBin<T> NodoBin, boolean y, int cont1) {
         if(!y) {
@@ -320,6 +376,10 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         return NodoBin;
     }
 
+    /**
+     * Metodo que retorna el nodo maximo
+     * @return
+     */
     @Override
     public T getMax() {
         if (isEmpty()) {
@@ -327,6 +387,11 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return getMax(root);
     }
+    /**
+     * Metodo auxiliar que retorna el nodo maximo
+     * @param NodoBin
+     * @return
+     */
 
     private T getMax(NodoBin<T> NodoBin) {
         if (NodoBin.getRightChild() != null) {
@@ -334,6 +399,10 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin.getData();
     }
+    /**
+     * Metodo que retorna el nodo minimo
+     * @return
+     */
 
     @Override
     public T getMin() {
@@ -342,6 +411,11 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return getMin(root);
     }
+    /**
+     * Metodo auxiliar que retorna el nodo minimo
+     * @param NodoBin
+     * @return
+     */
 
     private T getMin(NodoBin<T> NodoBin) {
         if (NodoBin.getLeftChild() != null) {
@@ -349,6 +423,10 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoBin.getData();
     }
+    /**
+     * Metodo que retorna un boolean que indica si el arbol esta vacio
+     * @return
+     */
 
     @Override
     public boolean isEmpty() {

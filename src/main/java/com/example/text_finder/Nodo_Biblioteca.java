@@ -1,6 +1,12 @@
 package com.example.text_finder;
 
+/**
+ * Clase de Nodo que gestiona los objetos de Documento a cada nodo de la biblioteca
+ */
 public class Nodo_Biblioteca {
+    /**
+     * Data del objeto de documento
+     */
     public Documento data;
     public Nodo_Biblioteca next;
 
@@ -9,19 +15,13 @@ public class Nodo_Biblioteca {
         this.next = null;
     }
 
+    /**
+     * Metodo que retorna la data de un nodo
+     * @return
+     */
     public Documento getData() {
         return data;
     }
 
-    public void setData(Documento data) {
-        this.data = data;
-    }
 
-    public Nodo_Biblioteca getNext() {
-        return next;
-    }
-
-    public void setNext(Nodo_Biblioteca next) {
-        this.next = next;
-    }
 }

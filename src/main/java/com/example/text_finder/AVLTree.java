@@ -1,5 +1,9 @@
 package com.example.text_finder;
 
+/**
+ *Clase que permite la gestion del arbol avl
+ * @param <T>
+ */
 public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private NodoAVL<T> root;
     public static String textResult = "";
@@ -10,12 +14,23 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
     private int apariciones = 0;
     public static String textResultdef = "";
 
+    /**
+     * Metodo que inserta nodos al arbol
+     * @param data
+     * @return
+     */
     @Override
     public AVLTree<T> insert(T data) {
         root = insert(data, root);
         return this;
     }
 
+    /**
+     * Metodo que inserta palabras al nodo
+     * @param data
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> insert(T data, NodoAVL<T> NodoAVL) {
         if (NodoAVL == null) {
             return new NodoAVL<>(data);
@@ -64,11 +79,21 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return applyRotation(NodoAVL);
     }
 
+    /**
+     * metodo que borra un nodo del arbol
+     * @param data
+     */
     @Override
     public void delete(T data) {
         root = delete(data, root);
     }
 
+    /**
+     * Metodo que borra data de un nodo
+     * @param data
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> delete(T data, NodoAVL<T> NodoAVL) {
         if (NodoAVL == null) {
             return null;
@@ -92,11 +117,18 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return applyRotation(NodoAVL);
     }
 
+    /**
+     * Metodo para llamar a una funcion de recorrido in order
+     */
     @Override
     public void traverse() {
         traverseInOrder(root);
     }
 
+    /**
+     * Metodo que realiza recorrido in order
+     * @param NodoAVL
+     */
     private void traverseInOrder(NodoAVL<T> NodoAVL) {
         if (NodoAVL != null) {
             traverseInOrder(NodoAVL.getLeftChild());
@@ -105,8 +137,13 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
     }
 
+    /**
+     * Metodo que busca una palabra en un arbol
+     * @param pal
+     */
     @Override
     public void Search(String pal) {
+        setComparaciones(0);
          String[] phra = pal.split(" ", -1);
         if (phra.length > 1) {
             apariciones = 0;
@@ -150,6 +187,13 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
             }
         }
     }
+
+    /**
+     * Metodo para buscar una palabra
+     * @param pal
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> SearchW(String pal, NodoAVL<T> NodoAVL) {
         if (NodoAVL == null) {
             return NodoAVL;
@@ -199,6 +243,14 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoAVL;
     }
+
+    /**
+     * Metodo para buscar una frase
+     * @param phra
+     * @param NodoAVL
+     * @param cont1
+     * @return
+     */
     private NodoAVL<T> SearchP(String[] phra, NodoAVL<T> NodoAVL, int cont1) {
         if (NodoAVL == null) {
             return NodoAVL;
@@ -266,6 +318,15 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         }
         return NodoAVL;
     }
+
+    /**
+     * Metodo auxiliar para buscar las palabras que le siguen a la encontrada
+     * @param pal
+     * @param NodoAVL
+     * @param y
+     * @param cont1
+     * @return
+     */
     private NodoAVL<T> SearchPAux(String pal, NodoAVL<T> NodoAVL, boolean y, int cont1) {
         if(!y) {
             if (NodoAVL == null) {
@@ -312,6 +373,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return NodoAVL;
     }
 
+    /**
+     * Metodo que retorna el nodo maximo
+     * @return
+     */
     @Override
     public T getMax() {
         if (isEmpty()) {
@@ -320,6 +385,11 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return getMax(root);
     }
 
+    /**
+     * Metodo auxiliar que retorna el nodo maximo
+     * @param NodoAVL
+     * @return
+     */
     private T getMax(NodoAVL<T> NodoAVL) {
         if (NodoAVL.getRightChild() != null) {
             return getMax(NodoAVL.getRightChild());
@@ -327,6 +397,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return NodoAVL.getData();
     }
 
+    /**
+     * Metodo que retorna el nodo minimo
+     * @return
+     */
     @Override
     public T getMin() {
         if (isEmpty()) {
@@ -335,6 +409,11 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return getMin(root);
     }
 
+    /**
+     * Metodo auxiliar que retorna el nodo minimo
+     * @param NodoAVL
+     * @return
+     */
     private T getMin(NodoAVL<T> NodoAVL) {
         if (NodoAVL.getLeftChild() != null) {
             return getMin(NodoAVL.getLeftChild());
@@ -342,11 +421,20 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return NodoAVL.getData();
     }
 
+    /**
+     * Metodo que retorna un boolean que indica si el arbol esta vacio
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         return root == null;
     }
 
+    /**
+     * Metodo que verifica el balance del arbol para realizar las rotaciones correspondientes
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> applyRotation(NodoAVL<T> NodoAVL) {
         int balance = balance(NodoAVL);
         if (balance > 1) {
@@ -365,6 +453,11 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return NodoAVL;
     }
 
+    /**
+     * Metodo que realiza rotacion a la derecha
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> rotateRight(NodoAVL<T> NodoAVL) {
         NodoAVL<T> leftNodoAVL = NodoAVL.getLeftChild();
         NodoAVL<T> centerNodoAVL = leftNodoAVL.getRightChild();
@@ -375,6 +468,11 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return leftNodoAVL;
     }
 
+    /**
+     * Metodo que realiza rotacion a la izquierda
+     * @param NodoAVL
+     * @return
+     */
     private NodoAVL<T> rotateLeft(NodoAVL<T> NodoAVL) {
         NodoAVL<T> rightNodoAVL = NodoAVL.getRightChild();
         NodoAVL<T> centerNodoAVL = rightNodoAVL.getLeftChild();
@@ -385,6 +483,10 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         return rightNodoAVL;
     }
 
+    /**
+     * Metodo que actualiza la altura del arbol
+     * @param NodoAVL
+     */
     private void updateHeight(NodoAVL<T> NodoAVL) {
         int maxHeight = Math.max(
                 height(NodoAVL.getLeftChild()),
@@ -393,18 +495,37 @@ public class AVLTree<T extends Comparable<T>> implements Tree<T> {
         NodoAVL.setHeight(maxHeight + 1);
     }
 
+    /**
+     * Metodo que verifica el balance del nodo
+     * @param NodoAVL
+     * @return
+     */
     private int balance(NodoAVL<T> NodoAVL) {
         return NodoAVL != null ? height(NodoAVL.getLeftChild()) - height(NodoAVL.getRightChild()) : 0;
     }
 
+    /**
+     * Metodo que retorna el valor de la altura
+     * @param NodoAVL
+     * @return
+     */
     private int height(NodoAVL<T> NodoAVL) {
         return NodoAVL != null ? NodoAVL.getHeight() : 0;
     }
 
+    /**
+     * metodo que retorna las comparaciones
+     * @return
+     */
     @Override
     public int getComparaciones() {
         return comparaciones;
     }
+
+    /**
+     * metodo que modifica las comparaciones
+     * @param num
+     */
     @Override
     public void setComparaciones(int num){
         comparaciones =num;

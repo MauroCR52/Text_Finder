@@ -21,6 +21,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Clase server que administra la comunicacion del server con el cliente
+ */
 public class Server {
     private ServerSocket serverSocket;
     private static Socket socket;
@@ -47,6 +50,10 @@ public class Server {
         }
     }
 
+    /**
+     *Metodo que envia un mensaje al cliente
+     * @param messageToClient
+     */
     public static void sendMessageToClient(String messageToClient) {
         try {
             bufferedWriter.write(messageToClient);
@@ -59,6 +66,10 @@ public class Server {
         }
     }
 
+    /**
+     * Metodo que recibe un mensaje del cliente
+     * @param vBox
+     */
     public void receiveMessageFromClient(VBox vBox) {
 
         new Thread(new Runnable() {
@@ -91,7 +102,6 @@ public class Server {
                             actual = actual.next;
                         }
 
-                        Controller.addLabel(messageFromClient, vBox);
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.out.println("Error recibiendo mensaje del cliente");
@@ -102,6 +112,12 @@ public class Server {
         }).start();
     }
 
+    /**
+     * Metodo que cierra el socket en caso de un error
+     * @param socket
+     * @param bufferedReader
+     * @param bufferedWriter
+     */
     public static void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
         try {
             if (bufferedReader != null)
@@ -114,6 +130,10 @@ public class Server {
         }
     }
 
+    /**
+     * Metodo que lee un archivo txt e inserta sus palabras en un arbol binario y avl
+     * @param archivo
+     */
     public static void leerTxt(String archivo) {
         String ArchivoDoc = archivo;
         String FieldDelimiter = " ";
@@ -163,6 +183,10 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * Metodo que lee un archivo docx e inserta sus palabras en un arbol binario y avl
+     * @param archivo
+     */
 
     public static void leerDocx(String archivo) {
         try {
@@ -187,7 +211,6 @@ public class Server {
                     if (celdas.length - i >= 4) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
                         bin.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "~" + celdas[i + 3] + "¬" + posicion + "¬" + String.valueOf(indicador));
-                        indicador += 1;
                     } else if (celdas.length - i == 3) {
                         bst.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
                         bin.insert(celdas[i] + "~" + celdas[i + 1] + "~" + celdas[i + 2] + "¬" + posicion + "¬" + indicador);
@@ -217,6 +240,10 @@ public class Server {
     }
 
     //Créditos para https://www.youtube.com/watch?v=CCgcMGdKurw
+    /**
+     * Metodo que lee un archivo pdf e inserta sus palabras en un arbol binario y avl
+     * @param archivo
+     */
 
     public static void leerPDF(String archivo) throws IOException {
         File file = new File(archivo);
@@ -274,120 +301,4 @@ public class Server {
         document.close();
     }
     //Créditos para https://www.tutorialspoint.com/how-to-read-data-from-pdf-file-and-display-on-console-in-java#:~:text=Load%20an%20existing%20PDF%20document,method%20of%20the%20PDFTextStripper%20class.
-    public void modDocx(String oldWord, String newWord) throws IOException {
-        int count = 0;
-        XWPFDocument document = new XWPFDocument();
-        XWPFDocument docx = new XWPFDocument(new FileInputStream("Prueba.docx"));
-        XWPFWordExtractor we = new XWPFWordExtractor(docx);
-        String text = we.getText() ;
-        if(text.contains(oldWord)){
-            text = text.replace(oldWord, newWord);
-            System.out.println(text);
-        }
-        char[] c = text.toCharArray();
-        for(int i= 0; i < c.length;i++){
-
-            if(c[i] == '\n'){
-                count ++;
-            }
-        }
-        System.out.println(c[0]);
-        StringTokenizer st = new StringTokenizer(text,"\n");
-
-        XWPFParagraph para = document.createParagraph();
-        para.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun run = para.createRun();
-        run.setBold(true);
-        run.setFontSize(36);
-        run.setText("Apache POI works well!");
-
-        List<XWPFParagraph>paragraphs = new ArrayList<XWPFParagraph>();
-        List<XWPFRun>runs = new ArrayList<XWPFRun>();
-        int k = 0;
-        for(k=0;k<count+1;k++){
-            paragraphs.add(document.createParagraph());
-        }
-        k=0;
-        while(st.hasMoreElements()){
-            paragraphs.get(k).setAlignment(ParagraphAlignment.LEFT);
-            paragraphs.get(k).setSpacingAfter(0);
-            paragraphs.get(k).setSpacingBefore(0);
-            run = paragraphs.get(k).createRun();
-            run.setText(st.nextElement().toString());
-            k++;
-        }
-
-        document.write(new FileOutputStream("Prueba.docx"));
-    }
-
-    static Integer[] lista_radix;
-    public static void LectorDocs() throws IOException {
-        List<Integer> lista = new ArrayList<Integer>();
-        File folder = new File("src/main/java/Documentos");
-        File[] listOfFiles = folder.listFiles();
-        for (File file : listOfFiles)
-            if (file.isFile()) {
-                int cont = 0;
-                String filename = file.toString();
-                int index = filename.lastIndexOf(".");
-                if (index > 0) {
-                    String extension = filename.substring(index + 1);
-                    if (extension.equals("txt")) {
-                        String line;
-                        FileReader fileReader = new FileReader(file.getPath());
-                        BufferedReader br = new BufferedReader(fileReader);
-                        while ((line = br.readLine()) != null) {                    /*Splits each line into words*/
-                            String words[] = line.split(" ");                    /*Counts each word*/
-                            cont += words.length;
-                        }
-                        br.close();
-                    } else if (extension.equals("docx")) {
-                        Document document = new Document();
-                        document.loadFromFile(file.getPath());
-                        cont = document.getBuiltinDocumentProperties().getWordCount();
-                    }
-                    else {
-                        PDDocument document = PDDocument.load(file);
-                        //Instantiate PDFTextStripper class
-                        PDFTextStripper pdfStripper = new PDFTextStripper();
-                        //Retrieving text from PDF document
-                        String s = pdfStripper.getText(document);
-                        String cad[] = s.split("\\r\\n", -1);
-                        int i = 0;
-                        int z = 0;
-                        StringBuilder textoT = new StringBuilder();
-                        while (i != cad.length) {
-                            String cad2[] = cad[i].split(" ", -1);
-                            int j = 0;
-                            while (j != cad2.length) {
-                                if (cad2[j] != "") {
-                                    textoT.append(cad2[j]);
-                                    textoT.append(" ");
-                                }
-                                j += 1;
-                            }
-                            i += 1;
-                        }
-                        String[] cad3 = textoT.toString().split(" ", -1);
-                        while (z != cad3.length) {
-                            if (cad3[z] != "") {
-                                String posicion = String.valueOf(textoT.indexOf(cad3[z]));
-                            }
-                            z += 1;
-                            cont += 1;
-                        }
-                        document.close();
-
-                    }
-                }
-                lista.add(cont);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHH");
-                Documento documento = new Documento(file.getName(), file.getPath(), cont, Integer.parseInt(sdf.format(file.lastModified())), filename.substring(index + 1));
-                Biblioteca.biblioteca.InsertarDocumento(documento);
-            }
-        lista_radix = new Integer[lista.size()];
-        lista_radix = lista.toArray(lista_radix);
-
-        System.out.println(Arrays.toString(lista_radix));
-    }
 }

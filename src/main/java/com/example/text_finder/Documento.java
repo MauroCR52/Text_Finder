@@ -1,16 +1,20 @@
 package com.example.text_finder;
 
+/**
+ * Clase que lleva los atributos necesarios para la gestion de documentos
+ */
 public class Documento {
+    /**
+     * Nombre del documento
+     */
     public String Nombre;
-
+    /**
+     * Formato del documento
+     */
     public String tipo;
 
     public String getNombre() {
         return Nombre;
-    }
-
-    public void setNombre(String nombre) {
-        Nombre = nombre;
     }
 
     public Documento(String nombre, String direccion, int tamano, int fecha, String tipo) {
@@ -25,32 +29,8 @@ public class Documento {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getDireccion() {
         return Direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        Direccion = direccion;
-    }
-
-    public int getTamano() {
-        return Tamano;
-    }
-
-    public void setTamano(int tamano) {
-        Tamano = tamano;
-    }
-
-    public int getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(int fecha) {
-        this.fecha = fecha;
     }
 
     public String Direccion;

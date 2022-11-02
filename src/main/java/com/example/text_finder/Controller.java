@@ -24,17 +24,21 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Clase controller que lleva los controles necesarios para la ventana del server
+ */
 public class Controller implements Initializable {
     @FXML
     private ScrollPane ScrollMain;
     @FXML
-    private Button enviarButton;
-    @FXML
-    private TextField mensajeText;
-    @FXML
     private VBox mensajeVBOX;
     private Server server;
 
+    /**
+     * metodo initialize que conecta el server a un puerto local
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -50,42 +54,5 @@ public class Controller implements Initializable {
             }
         });
         server.receiveMessageFromClient(mensajeVBOX);
-        enviarButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String messageToSend = mensajeText.getText();
-                if (!messageToSend.isEmpty()) {
-                    HBox hBox = new HBox();
-                    hBox.setAlignment(Pos.CENTER_RIGHT);
-                    hBox.setPadding(new Insets(5, 5, 5, 10));
-                    Text text = new Text(messageToSend);
-                    TextFlow textFlow = new TextFlow(text);
-                    textFlow.setStyle("-fx-color: rgb(239,242,255); -fx-background-color: rgb(15,125,242);-fx-background-radius: 20px");
-                    textFlow.setPadding(new Insets(5, 10, 5, 10));
-                    text.setFill(Color.color(0.934, 0.945, 0.996));
-                    hBox.getChildren().add(textFlow);
-                    mensajeVBOX.getChildren().add(hBox);
-                    server.sendMessageToClient(messageToSend);
-                    mensajeText.clear();
-                }
-            }
-        });
-    }
-
-    public static void addLabel(String messageFromClient, VBox vbox) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.CENTER_LEFT);
-        hBox.setPadding(new Insets(5, 5, 5, 10));
-        Text text = new Text(messageFromClient);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235);-fx-background-radius: 20px");
-        textFlow.setPadding(new Insets(5, 10, 5, 10));
-        hBox.getChildren().add(textFlow);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                vbox.getChildren().add(hBox);
-            }
-        });
     }
 }
